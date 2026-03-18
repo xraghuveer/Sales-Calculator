@@ -208,8 +208,8 @@ function calculate() {
         if (roundedBase < 200) tips.push(`<li><b>📦 Sell in Bundles:</b> Sell "2 for <span style="color: var(--neon-pink);">${formatPHP(roundUpPrice((finalSellPrice * 2) * 0.9))}</span>".</li>`);
         tipsDiv.innerHTML = `<div class="card tips-section"><h3 class="indie-heading">💡 Retail Strategy</h3><ul>${tips.join("")}</ul></div>`;
 
-        // Generate specific retail prompt with "minimum price/loss" condition
-        aiPrompt = `I am selling ${productName} on Facebook Marketplace in the Philippines. My unit cost is PHP ${realCost.toFixed(2)} and my planned selling price is PHP ${finalSellPrice.toFixed(2)}. Is my selling price competitive? What is the average market price? Also, what is the absolute minimum price I should sell this for so I don't bear a loss or make too little profit? Finally, how should I write the FB Marketplace listing to attract buyers?`;
+        // Generate specific retail prompt asking for a table format
+        aiPrompt = `I am selling ${productName} on Facebook Marketplace in the Philippines. My unit cost is PHP ${realCost.toFixed(2)} and my planned selling price is PHP ${finalSellPrice.toFixed(2)}. Please present a pricing analysis in a clean table with the following columns: My Cost, My Planned Price, Average Market Price, and Absolute Minimum Price (to avoid loss/low profit). Below the table, briefly tell me if my price is competitive and how I should write the FB Marketplace listing to attract buyers.`;
 
     } else {
         let baseWholesale = realCost < 80 ? realCost + 5 : realCost <= 500 ? realCost * 1.15 : realCost + 150;
@@ -235,8 +235,8 @@ function calculate() {
         
         tipsDiv.innerHTML = `<div class="card tips-section"><h3 class="indie-heading">💡 Wholesale Strategy</h3><ul><li><b>Volume is Key:</b> Wholesale margins are smaller (${formatPHP(moq5 - realCost)} profit per unit at MOQ 5), but you make it up by moving volume.</li><li><b>Shipping:</b> Have the buyer cover courier costs (Lalamove, Grab) directly since bulk items are heavy.</li></ul></div>`;
 
-        // Generate specific wholesale prompt with "minimum price/loss" condition
-        aiPrompt = `I am selling ${productName} wholesale on Facebook Marketplace in the Philippines. My unit cost is PHP ${realCost.toFixed(2)} and my MOQ 5 wholesale price is PHP ${moq5.toFixed(2)}. Is my pricing competitive for resellers? What is the average wholesale price for this? Also, what is the absolute minimum wholesale price I should accept so I don't bear a loss or make too little profit? Finally, how should I target resellers in my listing?`;
+        // Generate specific wholesale prompt asking for a table format
+        aiPrompt = `I am selling ${productName} wholesale on Facebook Marketplace in the Philippines. My unit cost is PHP ${realCost.toFixed(2)} and my MOQ 5 wholesale price is PHP ${moq5.toFixed(2)}. Please present a pricing analysis in a clean table with the following columns: My Cost, My MOQ 5 Price, Average Wholesale Market Price, and Absolute Minimum Wholesale Price (to avoid loss/low profit). Below the table, briefly tell me if my pricing is competitive for resellers and how I should target them in my listing.`;
     }
 
     // --- APPEND THE MARKET RESEARCH BOX TO OUTPUT ---
