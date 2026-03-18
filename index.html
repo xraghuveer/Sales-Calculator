@@ -112,10 +112,7 @@ input:checked + .slider:before { transform: translateX(18px); }
     <div class="card">
         <div class="indie-heading" style="margin-top: 0; margin-bottom: 5px;">Product Details</div>
         
-        <div style="display: flex; gap: 8px; align-items: center;">
-            <input type="text" id="productName" placeholder="e.g. Satin Pillowcase with Zipper">
-            <button onclick="calculate()" class="action-btn">✨ Scout</button>
-        </div>
+        <input type="text" id="productName" placeholder="e.g. Satin Pillowcase with Zipper" oninput="calculate()">
 
         <div class="indie-heading" style="margin-top: 25px; margin-bottom: 5px;">Sales Mode</div>
         <select id="mode" onchange="calculate()">
@@ -280,7 +277,7 @@ function calculate() {
     `;
 }
 
-// Support triggering scout on Enter key
+// Support triggering scout on Enter key (still works, though input calculates automatically now too!)
 document.getElementById("productName").addEventListener("keypress", function(event) {
   if (event.key === "Enter") {
     event.preventDefault();
