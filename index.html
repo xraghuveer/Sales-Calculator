@@ -38,7 +38,7 @@ body {
     color: var(--text-main); 
     margin: 0; 
     padding: 0; 
-    zoom: 0.9; /* SCALES EVERYTHING DOWN BY 10% */
+    zoom: 0.9; 
 }
 .container { max-width: 480px; margin: auto; padding: 20px; }
 
@@ -55,7 +55,6 @@ h1 {
 
 .card { background: var(--card-dark); padding: 20px; border-radius: 16px; margin-bottom: 20px; border: 1px solid var(--border-dark); }
 
-/* 15% Smaller Indie Headings */
 .indie-heading { font-family: var(--font-handwritten); color: var(--neon-pink); font-size: 21px; letter-spacing: 1px; margin-bottom: 10px; }
 .section-title { border-bottom: 1px dashed var(--border-dark); padding-bottom: 5px; }
 
@@ -63,7 +62,6 @@ h1 {
 .scout-btn { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--neon-pink); background: transparent; color: var(--neon-pink); font-size: 10px; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; transition: 0.3s; }
 .scout-btn:hover { background: var(--neon-pink); color: white; box-shadow: 0 0 15px var(--neon-pink); }
 
-/* Special Google AI Button styling */
 .google-ai-btn { background: linear-gradient(45deg, #ff0066, #9900ff); color: white; border: none; border-radius: 8px; font-weight: 800; }
 .google-ai-btn:hover { box-shadow: 0 0 15px #9900ff; }
 
@@ -71,7 +69,6 @@ label.input-label { font-size: 12px; font-weight: 600; color: var(--text-muted);
 input[type="text"], input[type="number"], select { font-family: var(--font-value); width: 100%; padding: 10px; margin-top: 8px; border-radius: 8px; border: 1px solid var(--border-dark); background: #0a0a0a; color: white; font-size: 14px; box-sizing: border-box; transition: all 0.2s ease-in-out; }
 select { font-family: var(--font-variable); appearance: none; cursor: pointer; background-color: #1a1016; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff0066' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 14px center; background-size: 14px; padding-right: 40px; }
 textarea { font-family: var(--font-value); width: 100%; padding: 12px; margin-top: 15px; border-radius: 8px; border: 1px solid var(--border-dark); background: #0a0a0a; color: var(--neon-pink); font-size: 12px; box-sizing: border-box; resize: vertical; cursor: pointer; }
-textarea:focus, input[type="text"]:focus, input[type="number"]:focus, select:focus { outline: none; border-color: var(--neon-pink); box-shadow: 0 0 8px var(--pink-glow); }
 
 .toggle-row { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
 .toggle-row span { font-size: 13px; font-weight: 600; color: var(--text-main); }
@@ -80,7 +77,6 @@ textarea:focus, input[type="text"]:focus, input[type="number"]:focus, select:foc
 .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border-dark); transition: .3s; border-radius: 24px; }
 .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
 input:checked + .slider { background-color: var(--neon-pink); }
-input:focus + .slider { box-shadow: 0 0 8px var(--pink-glow); }
 input:checked + .slider:before { transform: translateX(18px); }
 
 .result { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-dark); }
@@ -91,15 +87,12 @@ input:checked + .slider:before { transform: translateX(18px); }
 .data-row.highlight span:first-child { color: var(--text-main); font-weight: 600; }
 .data-row.highlight span:last-child { font-size: 20px; font-weight: 800; color: var(--neon-pink); }
 
-.bad { color: #ff453a; font-family: var(--font-variable); font-weight: 600; }
-.good { color: #32d74b; font-family: var(--font-variable); font-weight: 600; }
 .category-badge { display: inline-block; background: rgba(255, 0, 102, 0.1); color: var(--neon-pink); border: 1px solid var(--neon-pink); padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
 
 .tips-section h3 { margin-bottom: 12px; margin-top: 0; }
 .tips-section ul { padding-left: 20px; margin: 0; font-size: 13px; color: #d1d5db; line-height: 1.6; }
 .tips-section li { margin-bottom: 10px; }
 
-/* New Market Research Section */
 .market-research-box { margin-top: 25px; padding: 15px; background: linear-gradient(145deg, #1a050d, #000000); border: 1px solid var(--neon-pink); border-radius: 12px; }
 </style>
 </head>
@@ -151,7 +144,6 @@ input:checked + .slider:before { transform: translateX(18px); }
 </div>
 
 <script>
-// Global variable to track the new specific platform toggle
 window.usePlatformAI = false;
 
 const formatPHP = (num) => new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(num);
@@ -180,11 +172,8 @@ function calculate() {
         return;
     }
 
-    // BASE CALCULATIONS
     let realCost = itemPrice + (shipping / qty);
     let category = realCost < 80 ? "Small Item (Under ₱80)" : realCost <= 500 ? "Medium Item (₱80 - ₱500)" : "Big Item (₱500+)";
-
-    // ALWAYS CALCULATE RETAIL PRICE
     let baseRetailMath = realCost < 80 ? realCost + 10 : realCost <= 500 ? realCost * 1.25 : realCost + 300;
     let standardRetailPrice = roundUpPrice(baseRetailMath);
 
@@ -192,20 +181,15 @@ function calculate() {
     let platformAiPrompt = "";
 
     if (mode === "retail") {
-        let minProfit = realCost < 80 ? 8 : realCost <= 500 ? 40 : 200;
-        
         let meetupAmount = 0;
         let meetupLabel = "Disabled";
         if (includeMeetup) {
-            if (standardRetailPrice < 200) { meetupAmount = 30; meetupLabel = "+ ₱30"; } 
-            else if (standardRetailPrice < 300) { meetupAmount = 20; meetupLabel = "+ ₱20"; } 
-            else { meetupAmount = 0; meetupLabel = "FREE 🎉"; }
+            if (standardRetailPrice < 200) { meetupAmount = 30; } 
+            else if (standardRetailPrice < 300) { meetupAmount = 20; }
+            meetupLabel = meetupAmount > 0 ? `+ ₱${meetupAmount}` : "FREE 🎉";
         }
-
         let finalSellPrice = standardRetailPrice + meetupAmount;
         let profit = finalSellPrice - realCost;
-        let isGoodProfit = profit >= minProfit;
-        let profitColor = isGoodProfit ? "#32d74b" : "#ff453a";
 
         outputDiv.innerHTML = `
             <div class="result">
@@ -213,96 +197,53 @@ function calculate() {
                 <div class="data-row"><span>Real Unit Cost:</span><span>${formatPHP(realCost)}</span></div>
                 <div class="data-row"><span>Meetup Fee Applied:</span><span style="color: #a1a1aa;">${meetupLabel}</span></div>
                 <div class="data-row highlight"><span>Final Sell Price:</span><span>${formatPHP(finalSellPrice)}</span></div>
-                <div class="data-row" style="margin-top: 15px;"><span>Net Profit:</span><span style="color: ${profitColor};">${formatPHP(profit)}</span></div>
+                <div class="data-row" style="margin-top: 15px;"><span>Net Profit:</span><span style="color: #32d74b;">${formatPHP(profit)}</span></div>
             </div>
         `;
 
-        let tips = [];
-        if (!isGoodProfit) tips.push(`<li><b style="color: #ff453a;">⚠️ Low Margin:</b> Raise price to <span style="color: var(--neon-pink);">${formatPHP(realCost + minProfit)}</span>.</li>`);
-        if (standardRetailPrice < 200) tips.push(`<li><b>📦 Sell in Bundles:</b> Sell "2 for <span style="color: var(--neon-pink);">${formatPHP(roundUpPrice((finalSellPrice * 2) * 0.9))}</span>".</li>`);
-        tipsDiv.innerHTML = `<div class="card tips-section"><h3 class="indie-heading">💡 Retail Strategy</h3><ul>${tips.join("")}</ul></div>`;
+        // INSTRUCTION: Clear distinction that user is FB Seller looking for price protection
+        generalAiPrompt = `I am a Facebook Marketplace seller in the Philippines. Analyze the general market for: ${productName}. My Cost: ₱${realCost.toFixed(2)}. My Price: ₱${finalSellPrice.toFixed(2)}. Output: 1) Table [Cost | My Price | Avg Market Price | Realistic Min Price]. 2) Is it SUSTAINABLE to sell at this price on FB Marketplace? Should I PROCEED? 3) A short FB listing template.`;
 
-        // GENERAL AI PROMPT
-        generalAiPrompt = `FB Marketplace Philippines RETAIL analysis for: ${productName}. My Unit Cost: PHP ${realCost.toFixed(2)}. My intended Retail Selling Price: PHP ${finalSellPrice.toFixed(2)}. Please determine the actual market average and output exactly: 1) A table with columns [My Cost | My Retail Price | AI's Est. Avg Market Retail Price | Realistic Min Price (factoring basic overhead/effort)]. 2) A clear verdict explicitly stating if I should PROCEED with this price and if it is a GOOD, SUSTAINABLE long-term price against the actual market. 3) A short, bulleted listing template.`;
-
-        // PLATFORM AI PROMPT
-        platformAiPrompt = `Analyze prices specifically on Shopee Philippines, Lazada Philippines, and Facebook Marketplace for: ${productName}. My Unit Cost: PHP ${realCost.toFixed(2)}. My intended Retail Price: PHP ${finalSellPrice.toFixed(2)}. Output exactly: 1) A table with columns [My Cost | My Price | Avg Shopee/Lazada Price | Avg FB Price | Realistic Min Price]. 2) A clear verdict stating explicitly if I should PROCEED with my price based on these 3 platforms and if it's a SUSTAINABLE price. 3) A listing template.`;
+        platformAiPrompt = `I am a Facebook Marketplace seller. SPY on Shopee & Lazada Philippines prices for: ${productName}. I need to know if my FB Marketplace price of ₱${finalSellPrice.toFixed(2)} can compete considering Shopee/Lazada buyers pay shipping fees. Output: 1) Table [My FB Price | Avg Shopee Price | Avg Lazada Price | Realistic Min Price]. 2) Is my FB price SUSTAINABLE against these platforms? Should I PROCEED? 3) A short FB listing template emphasizing "No hidden shipping fees/Fast pickup".`;
 
     } else {
         let baseWholesale = realCost < 80 ? realCost + 5 : realCost <= 500 ? realCost * 1.15 : realCost + 150;
         let moq5 = baseWholesale;
-        let moq10 = baseWholesale * 0.95; 
-        let moq20 = baseWholesale * 0.90; 
-
-        let fbText = `📦 WHOLESALE PRICE LIST 📦\n\n✅ 5+ pcs: ${formatPHP(moq5)} each\n✅ 10+ pcs: ${formatPHP(moq10)} each\n✅ 20+ pcs: ${formatPHP(moq20)} each\n\n📩 Send us a message to order!`;
+        let fbText = `📦 WHOLESALE PRICE LIST 📦\n\n✅ 5+ pcs: ${formatPHP(moq5)} each\n✅ 10+ pcs: ${formatPHP(moq5 * 0.95)} each\n✅ 20+ pcs: ${formatPHP(moq5 * 0.90)} each\n\n📩 Send us a message to order!`;
 
         outputDiv.innerHTML = `
             <div class="result">
                 <span class="category-badge">${category}</span>
                 <div class="data-row"><span>Real Unit Cost:</span><span>${formatPHP(realCost)}</span></div>
-                <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed var(--border-dark);">
-                    <div class="indie-heading" style="font-size: 20px; margin-bottom: 12px; color: #32d74b;">Profit Breakdown</div>
-                    <div class="data-row"><span>5+ pcs tier:</span><span style="color: #32d74b;">${formatPHP(moq5 - realCost)}</span></div>
-                    <div class="data-row"><span>10+ pcs tier:</span><span style="color: #32d74b;">${formatPHP(moq10 - realCost)}</span></div>
-                    <div class="data-row"><span>20+ pcs tier:</span><span style="color: #32d74b;">${formatPHP(moq20 - realCost)}</span></div>
-                </div>
                 <textarea rows="6" readonly onclick="this.select()">${fbText}</textarea>
             </div>
         `;
-        
-        tipsDiv.innerHTML = `<div class="card tips-section"><h3 class="indie-heading">💡 Wholesale Strategy</h3><ul><li><b>Volume is Key:</b> Wholesale margins are smaller (${formatPHP(moq5 - realCost)} profit per unit at MOQ 5), but you make it up by moving volume.</li><li><b>Shipping:</b> Have the buyer cover courier costs (Lalamove, Grab) directly since bulk items are heavy.</li></ul></div>`;
 
-        // GENERAL AI PROMPT
-        generalAiPrompt = `FB Marketplace Philippines WHOLESALE analysis for: ${productName}. My Unit Cost: PHP ${realCost.toFixed(2)}. My intended Retail Price: PHP ${standardRetailPrice.toFixed(2)}. My intended Wholesale (MOQ 5) Price: PHP ${moq5.toFixed(2)}. Please determine the actual market averages and output exactly: 1) A table with columns [My Cost | My Wholesale Price | AI's Est. Avg Market Wholesale Price | AI's Est. Avg Market Retail Price | Reseller's Potential Profit | Realistic Min Wholesale Price (factoring overhead)]. 2) A clear verdict explicitly stating if I should PROCEED with this wholesale price and if it is a GOOD, SUSTAINABLE long-term margin for resellers. 3) A short, bulleted FB listing template targeting resellers.`;
+        generalAiPrompt = `I am a Facebook Wholesale supplier. Analyze the market for: ${productName}. My Cost: ₱${realCost.toFixed(2)}. My Wholesale (MOQ 5) Price: ₱${moq5.toFixed(2)}. Output: 1) Table [Cost | My Wholesale | Avg Market Wholesale | Realistic Min Wholesale]. 2) Is this SUSTAINABLE for me and my resellers? Should I PROCEED? 3) A wholesale listing template.`;
 
-        // PLATFORM AI PROMPT
-        platformAiPrompt = `Analyze WHOLESALE/BULK prices specifically on Shopee Philippines, Lazada Philippines, and Facebook Marketplace for: ${productName}. My Unit Cost: PHP ${realCost.toFixed(2)}. My intended Wholesale (MOQ 5) Price: PHP ${moq5.toFixed(2)}. Output exactly: 1) A table with columns [My Cost | My MOQ 5 Price | Avg Shopee/Lazada Bulk Price | Avg FB Bulk Price | Realistic Min Bulk Price]. 2) A clear verdict stating explicitly if I should PROCEED with my wholesale price based on these platforms and if it's a SUSTAINABLE price for resellers. 3) A bulleted bulk listing template.`;
+        platformAiPrompt = `I am a Facebook Wholesale supplier. SPY on Shopee/Lazada BULK prices for: ${productName}. My Bulk Price: ₱${moq5.toFixed(2)}. Output: 1) Table [My FB Bulk | Shopee Bulk Avg | Lazada Bulk Avg | Realistic Min Bulk]. 2) Is my price SUSTAINABLE against platform prices? Should I PROCEED? 3) A wholesale listing template.`;
     }
 
-    // Determine which prompt to use based on the toggle state
     let activePrompt = window.usePlatformAI ? platformAiPrompt : generalAiPrompt;
     let googleLink = `https://www.google.com/search?q=${encodeURIComponent(activePrompt)}`;
-    
-    let shopeeLink = `https://shopee.ph/search?keyword=${encodeURIComponent(productName)}`;
-    let lazadaLink = `https://www.lazada.com.ph/catalog/?q=${encodeURIComponent(productName)}`;
-
-    let warningText = rawProductName === "" ? `<div style="color: #ffcc00; font-size: 11px; margin-bottom: 8px; text-align: center;">⚠️ Tip: Enter a 'Product Name' at the top for better AI results!</div>` : "";
-
-    // Toggle checked state string
     let toggleCheckedStr = window.usePlatformAI ? "checked" : "";
 
     outputDiv.innerHTML += `
         <div class="market-research-box">
             <div class="indie-heading" style="font-size: 20px; text-align: center;">✨ Scout the Market</div>
-            ${warningText}
-            
             <div class="toggle-row" style="margin-top: 5px; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 15px;">
-                <span style="font-size: 12px; color: var(--text-muted);">Target Shopee/Lazada specifically?</span>
+                <span style="font-size: 12px; color: var(--text-muted);">Compare vs Shopee/Lazada prices?</span>
                 <label class="switch">
                     <input type="checkbox" onchange="window.usePlatformAI = this.checked; calculate()" ${toggleCheckedStr}>
                     <span class="slider"></span>
                 </label>
             </div>
-            
             <a href="${googleLink}" target="_blank" class="scout-btn google-ai-btn" style="display: block; padding: 12px; font-size: 12px;">
-                🧠 ASK GOOGLE AI FOR STRATEGY
+                🧠 ASK GOOGLE AI FOR ANALYSIS
             </a>
-            
-            <div class="btn-group" style="margin-top: 10px;">
-                <a href="${shopeeLink}" target="_blank" class="scout-btn">🔎 SHOPEE MANUALLY</a>
-                <a href="${lazadaLink}" target="_blank" class="scout-btn">🔎 LAZADA MANUALLY</a>
-            </div>
         </div>
     `;
 }
-
-// Support triggering scout on Enter key 
-document.getElementById("productName").addEventListener("keypress", function(event) {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    calculate();
-  }
-});
 </script>
 
 </body>
