@@ -47,22 +47,15 @@ body {
     padding: 20px;
 }
 
-/* Image-based Header Container */
-.kitty-header {
-    border: none;
-    margin: 0;
-    padding: 0;
-    background: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* Reverted Header Text Styling */
+h1 {
+    font-family: var(--font-header);
+    text-align: center;
+    font-size: 34px; 
+    font-weight: 400;
     margin-bottom: 22px;
-}
-
-.kitty-header img {
-    max-height: 100px; /* Adjust height as needed */
-    max-width: 100%;
-    object-fit: contain;
+    letter-spacing: 1px;
+    color: var(--neon-pink);
 }
 
 .card {
@@ -73,7 +66,7 @@ body {
     border: 1px solid var(--border-dark);
 }
 
-/* Custom Indie Flower Class for targeted headers */
+/* Custom Indie Flower Class for all targeted headers */
 .indie-heading {
     font-family: var(--font-handwritten);
     color: var(--neon-pink);
@@ -270,7 +263,6 @@ input:checked + .slider:before {
 
 /* Tips Section */
 .tips-section h3 {
-    font-size: 30px; 
     margin-bottom: 12px;
     margin-top: 0;
 }
@@ -296,9 +288,7 @@ input:checked + .slider:before {
 <body>
 
 <div class="container">
-    <div class="kitty-header">
-        <img src="kitty_calculator_neon_logo.png" alt="Kitty Calculator 🐾 HELLO KITTY NEON" />
-    </div>
+    <h1>Kitty Calculator 🐾</h1>
 
     <div class="card">
         <div class="indie-heading" style="margin-top: 0; margin-bottom: 5px;">Sales Mode</div>
@@ -337,7 +327,7 @@ input:checked + .slider:before {
 </div>
 
 <script>
-// Logic остается идентичной вашей рабочей версии, просто пользовательский интерфейс отображает результаты на основе ввода.
+// Logic remains identical to your working version, just the UI displays results based on input.
 const formatPHP = (num) => {
     return new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(num);
 };
@@ -369,8 +359,10 @@ function calculate() {
         return;
     }
 
+    // Step 1: Calculate Real Cost
     let realCost = itemPrice + (shipping / qty);
     
+    // Step 2: Determine Category
     let category = "";
     if (realCost < 80) {
         category = "Small Item (Under ₱80)";
@@ -416,6 +408,9 @@ function calculate() {
             ? `<span class="good">Good Profit</span>` 
             : `<span class="bad">BAD PROFIT (Below ₱${minProfit})</span>`;
 
+        // Make the net profit dynamically green (or red if bad)
+        let profitColor = isGoodProfit ? "#32d74b" : "#ff453a";
+
         outputDiv.innerHTML = `
             <div class="result">
                 <span class="category-badge">${category}</span>
@@ -437,7 +432,7 @@ function calculate() {
 
                 <div class="data-row" style="margin-top: 15px;">
                     <span>Net Profit:</span>
-                    <span style="color: #32d74b;">${formatPHP(profit)}</span>
+                    <span style="color: ${profitColor};">${formatPHP(profit)}</span>
                 </div>
                 
                 <div style="text-align: right; margin-top: 5px; font-size: 13px;">
@@ -517,10 +512,33 @@ function calculate() {
                         <span>20+ pcs tier:</span>
                         <span style="color: #32d74b;">${formatPHP(profit20)}</span>
                     </div>
-title>Kitty Calculator</title>
-</head>
+                    <div class="data-row">
+                        <span>50+ pcs tier:</span>
+                        <span style="color: #32d74b;">${formatPHP(profit50)}</span>
+                    </div>
+                </div>
+                
+                <label class="input-label" style="text-align: left; margin-top: 20px;">Copy for Facebook:</label>
+                <textarea rows="8" readonly onclick="this.select()">${fbText}</textarea>
+                <p style="font-size: 11px; color: var(--text-muted); margin-top: 5px; text-align: right;">Click text to highlight and copy.</p>
+            </div>
+        `;
+        
+        tipsDiv.innerHTML = `
+            <div class="card tips-section">
+                <h3 class="indie-heading">💡 Wholesale Strategy</h3>
+                <ul>
+                    <li><b>Volume is Key:</b> Wholesale margins are smaller (${formatPHP(profit5)} profit per unit at MOQ 5), but you make it up by moving volume.</li>
+                    <li><b>Shipping:</b> Have the buyer cover courier costs (Lalamove, Grab) directly since bulk items are heavy.</li>
+                </ul>
+            </div>
+        `;
+    }
+}
 
-<body>
+// Init run
+calculate();
+</script>
 
 </body>
 </html>
