@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kitty Calculator</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #000000;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 480px;
+    margin: auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
+}
+
+.card {
+    background: #111111;
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    border: 1px solid #333333;
+}
+
+label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #a1a1aa;
+    display: block;
+    margin-top: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    border-radius: 8px;
+    border: 1px solid #333333;
+    background: #0a0a0a;
+    color: white;
+    font-size: 16px;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+input:focus {
+    outline: none;
+    border-color: #666666;
+}
+
+.result {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #333333;
+}
+
+.data-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.data-row.highlight {
+    font-size: 20px;
+    font-weight: 800;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed #333333;
+}
+
+.bad { color: #ff453a; font-weight: 600; }
+.good { color: #32d74b; font-weight: 600; }
+
+.category-badge {
+    display: inline-block;
+    background: #222222;
+    color: #ffffff;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+/* Tips Section */
+.tips-section h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #ffcc00; /* Subtle gold for tips */
+}
+
+.tips-section ul {
+    padding-left: 20px;
+    margin: 0;
+    font-size: 14px;
+    color: #d1d5db;
+    line-height: 1.6;
+}
+
+.tips-section li {
+    margin-bottom: 8px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Kitty Calculator 🐾</h1>
+
+    <div class="card">
+        <label>Item Cost (₱)</label>
+        <input type="number" id="cost" min="0" placeholder="0" oninput="calculate()">
+
+        <label>Supplier Shipping (Total ₱)</label>
+        <input type="number" id="shipping" min="0" placeholder="0" oninput="calculate()">
+
+        <label>Total Items Received</label>
+        <input type="number" id="items" min="1" value="1" oninput="calculate()">
+
+        <div id="output">
+            </div>
+    </div>
+
+    <div class="card tips-section">
+        <h3>💡 How to Sell More & Fix Low Profit</h3>
+        <ul>
+            <li><b>Sell in Bundles:</b> If it's ₱50 each, offer 2 for ₱90 to increase volume.</li>
+            <li><b>Set a Minimum Order:</b> e.g., "Minimum order ₱100" avoids time-wasting small orders.</li>
+            <li><b>The "Free Meetup" Trick:</b> Offer free meetup for ₱300+ orders to push buyers to add one more item.</li>
+            <li><b>Separate Shipping:</b> Never include shipping costs in cheap item prices; charge it separately or via meetup fee.</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+const formatPHP = (num) => {
+    return new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(num);
+};
+
+// Auto-round to nearest 5 (Rule #4)
+const roundUpPrice = (price) => {
+    return Math.ceil(price / 5) * 5;
+};
+
+function calculate() {
+    let cost = parseFloat(document.getElementById("cost").value) || 0;
+    let shipping = parseFloat(document.getElementById("shipping").value) || 0;
+    let items = parseFloat(document.getElementById("items").value) || 1;
+
+    let outputDiv = document.getElementById("output");
+
+    if (cost === 0) {
+        outputDiv.innerHTML = `<div class="result" style="color: #666; text-align: center;">Enter costs to calculate pricing.</div>`;
+        return;
+    }
+
+    let realCost = cost + (shipping / items);
+    
+    let category = "";
+    let baseSellPrice = 0;
+    let minProfit = 0;
+
+    // Apply Cost Brackets & Multipliers
+    if (realCost < 80) {
+        category = "Small Item (Under ₱80)";
+        baseSellPrice = realCost * 1.5;
+        minProfit = 8;
+    } else if (realCost <= 500) {
+        category = "Medium Item (₱80 - ₱500)";
+        baseSellPrice = realCost * 1.5;
+        minProfit = 40;
+    } else {
+        category = "Big Item (₱500+)";
+        baseSellPrice = realCost * 1.6;
+        minProfit = 200;
+    }
+
+    // Apply Rounding Rule (e.g., 43 -> 45)
+    let finalSellPrice = roundUpPrice(baseSellPrice);
+    let profit = finalSellPrice - realCost;
+
+    // Calculate Meetup Fee based on Order Size
+    let meetupFee = 0;
+    let meetupText = "";
+    if (finalSellPrice < 200) {
+        meetupFee = 30;
+        meetupText = "+ ₱30 Meetup Fee";
+    } else if (finalSellPrice < 300) {
+        meetupFee = 20;
+        meetupText = "+ ₱20 Meetup Fee";
+    } else {
+        meetupFee = 0;
+        meetupText = "FREE Meetup! 🎉";
+    }
+
+    // Check Profit Status
+    let isGoodProfit = profit >= minProfit;
+    let statusHTML = isGoodProfit 
+        ? `<span class="good">Good Profit</span>` 
+        : `<span class="bad">BAD PROFIT (Below ₱${minProfit})</span>`;
+
+    outputDiv.innerHTML = `
+        <div class="result">
+            <span class="category-badge">${category}</span>
+            
+            <div class="data-row">
+                <span>Real Unit Cost:</span>
+                <span>${formatPHP(realCost)}</span>
+            </div>
+            
+            <div class="data-row">
+                <span>Est. Meetup Fee:</span>
+                <span style="color: #a1a1aa;">${meetupText}</span>
+            </div>
+
+            <div class="data-row highlight">
+                <span>Final Sell Price:</span>
+                <span>${formatPHP(finalSellPrice)}</span>
+            </div>
+
+            <div class="data-row" style="margin-top: 15px;">
+                <span>Net Profit:</span>
+                <span>${formatPHP(profit)}</span>
+            </div>
+            
+            <div style="text-align: right; margin-top: 5px; font-size: 14px;">
+                ${statusHTML}
+            </div>
+        </div>
+    `;
+}
+
+// Init
+calculate();
+</script>
+
+</body>
+</html>
