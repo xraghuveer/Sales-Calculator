@@ -44,9 +44,9 @@ body {
 h1 {
     font-family: var(--font-header);
     text-align: center;
-    font-size: 38px;
+    font-size: 34px; /* Reduced from 38px */
     font-weight: 400;
-    margin-bottom: 25px;
+    margin-bottom: 22px;
     letter-spacing: 1px;
     color: var(--neon-pink);
 }
@@ -63,7 +63,7 @@ h1 {
 .indie-heading {
     font-family: var(--font-handwritten);
     color: var(--neon-pink);
-    font-size: 28px;
+    font-size: 25px; /* Reduced from 28px */
     letter-spacing: 1px;
     margin-bottom: 10px;
 }
@@ -74,7 +74,7 @@ h1 {
 }
 
 label.input-label {
-    font-size: 13px;
+    font-size: 12px; /* Reduced from 13px */
     font-weight: 600;
     color: var(--text-muted);
     display: block;
@@ -86,13 +86,13 @@ label.input-label {
 input[type="number"], select {
     font-family: var(--font-value); 
     width: 100%;
-    padding: 12px;
+    padding: 10px; /* Slightly tighter padding */
     margin-top: 8px;
     border-radius: 8px;
     border: 1px solid var(--border-dark);
     background: #0a0a0a;
     color: white;
-    font-size: 16px;
+    font-size: 14px; /* Reduced from 16px */
     box-sizing: border-box;
     transition: all 0.2s ease-in-out;
 }
@@ -102,13 +102,12 @@ select {
     font-family: var(--font-variable);
     appearance: none;
     cursor: pointer;
-    background-color: #1a1016; /* Subtle dark pink/purple background tint */
-    /* Custom Neon Pink SVG Arrow */
+    background-color: #1a1016; 
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff0066' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     background-repeat: no-repeat;
     background-position: right 14px center;
-    background-size: 16px;
-    padding-right: 40px; /* Space for the arrow */
+    background-size: 14px;
+    padding-right: 40px; 
 }
 
 textarea {
@@ -120,7 +119,7 @@ textarea {
     border: 1px solid var(--border-dark);
     background: #0a0a0a;
     color: var(--neon-pink);
-    font-size: 13px;
+    font-size: 12px; /* Reduced from 13px */
     box-sizing: border-box;
     resize: vertical;
     cursor: pointer;
@@ -141,7 +140,7 @@ textarea:focus, input[type="number"]:focus, select:focus {
 }
 
 .toggle-row span {
-    font-size: 14px;
+    font-size: 13px; /* Reduced from 14px */
     font-weight: 600;
     color: var(--text-main);
 }
@@ -149,8 +148,8 @@ textarea:focus, input[type="number"]:focus, select:focus {
 .switch {
     position: relative;
     display: inline-block;
-    width: 44px;
-    height: 24px;
+    width: 40px; /* Slightly smaller switch */
+    height: 22px;
 }
 
 .switch input {
@@ -174,8 +173,8 @@ textarea:focus, input[type="number"]:focus, select:focus {
 .slider:before {
     position: absolute;
     content: "";
-    height: 18px;
-    width: 18px;
+    height: 16px;
+    width: 16px;
     left: 3px;
     bottom: 3px;
     background-color: white;
@@ -192,7 +191,7 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-    transform: translateX(20px);
+    transform: translateX(18px);
 }
 
 /* Results Styles */
@@ -211,13 +210,13 @@ input:checked + .slider:before {
 
 .data-row span:first-child {
     font-family: var(--font-variable);
-    font-size: 15px;
+    font-size: 13px; /* Reduced from 15px */
     color: var(--text-muted);
 }
 
 .data-row span:last-child {
     font-family: var(--font-value);
-    font-size: 16px;
+    font-size: 14px; /* Reduced from 16px */
     font-weight: 700;
 }
 
@@ -233,7 +232,7 @@ input:checked + .slider:before {
 }
 
 .data-row.highlight span:last-child {
-    font-size: 22px;
+    font-size: 20px; /* Reduced from 22px */
     font-weight: 800;
     color: var(--neon-pink);
 }
@@ -246,9 +245,9 @@ input:checked + .slider:before {
     background: rgba(255, 0, 102, 0.1);
     color: var(--neon-pink);
     border: 1px solid var(--neon-pink);
-    padding: 6px 12px;
+    padding: 5px 10px;
     border-radius: 6px;
-    font-size: 12px;
+    font-size: 11px; /* Reduced from 12px */
     font-weight: 600;
     margin-bottom: 15px;
     text-transform: uppercase;
@@ -257,6 +256,7 @@ input:checked + .slider:before {
 
 /* Tips Section */
 .tips-section h3 {
+    font-size: 30px; /* Reduced from 34px */
     margin-bottom: 12px;
     margin-top: 0;
 }
@@ -264,7 +264,7 @@ input:checked + .slider:before {
 .tips-section ul {
     padding-left: 20px;
     margin: 0;
-    font-size: 14px;
+    font-size: 13px; /* Reduced from 14px */
     color: #d1d5db;
     line-height: 1.6;
 }
@@ -425,7 +425,7 @@ function calculate() {
                     <span>${formatPHP(profit)}</span>
                 </div>
                 
-                <div style="text-align: right; margin-top: 5px; font-size: 14px;">
+                <div style="text-align: right; margin-top: 5px; font-size: 13px;">
                     ${statusHTML}
                 </div>
             </div>
@@ -485,7 +485,7 @@ function calculate() {
                 
                 <label class="input-label" style="text-align: left; margin-top: 15px;">Copy for Facebook:</label>
                 <textarea rows="9" readonly onclick="this.select()">${fbText}</textarea>
-                <p style="font-size: 12px; color: var(--text-muted); margin-top: 5px; text-align: right;">Click text to highlight and copy.</p>
+                <p style="font-size: 11px; color: var(--text-muted); margin-top: 5px; text-align: right;">Click text to highlight and copy.</p>
             </div>
         `;
         
