@@ -14,7 +14,7 @@
     --border-dark: #333333;
     --text-main: #ffffff;
     --text-muted: #a1a1aa;
-    --neon-pink: #ff0066; /* Vibrant pink from the web design */
+    --neon-pink: #ff0066;
     --pink-glow: rgba(255, 0, 102, 0.3);
 }
 
@@ -48,7 +48,7 @@ h1 {
     border: 1px solid var(--border-dark);
 }
 
-label {
+label.input-label {
     font-size: 13px;
     font-weight: 600;
     color: var(--text-muted);
@@ -58,7 +58,7 @@ label {
     letter-spacing: 0.5px;
 }
 
-input {
+input[type="number"] {
     width: 100%;
     padding: 12px;
     margin-top: 8px;
@@ -72,12 +72,76 @@ input {
     transition: all 0.2s ease-in-out;
 }
 
-input:focus {
+input[type="number"]:focus {
     outline: none;
     border-color: var(--neon-pink);
     box-shadow: 0 0 8px var(--pink-glow);
 }
 
+/* Custom Toggle Switch Styles */
+.toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.toggle-row span {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--border-dark);
+    transition: .3s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .3s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--neon-pink);
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 8px var(--pink-glow);
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+/* Results Styles */
 .result {
     margin-top: 20px;
     padding-top: 20px;
@@ -99,7 +163,6 @@ input:focus {
     border-top: 1px dashed var(--neon-pink);
 }
 
-/* Make the final price number specifically pink */
 .data-row.highlight span:last-child {
     color: var(--neon-pink);
 }
@@ -109,7 +172,7 @@ input:focus {
 
 .category-badge {
     display: inline-block;
-    background: rgba(255, 0, 102, 0.1); /* Transparent pink bg */
+    background: rgba(255, 0, 102, 0.1);
     color: var(--neon-pink);
     border: 1px solid var(--neon-pink);
     padding: 4px 10px;
@@ -146,28 +209,29 @@ input:focus {
     <h1>Kitty Calculator 🐾</h1>
 
     <div class="card">
-        <label>Item Cost (₱)</label>
+        <label class="input-label">Item Cost (₱)</label>
         <input type="number" id="cost" min="0" placeholder="0" oninput="calculate()">
 
-        <label>Supplier Shipping (Total ₱)</label>
+        <label class="input-label">Supplier Shipping (Total ₱)</label>
         <input type="number" id="shipping" min="0" placeholder="0" oninput="calculate()">
 
-        <label>Total Items Received</label>
+        <label class="input-label">Total Items Received</label>
         <input type="number" id="items" min="1" value="1" oninput="calculate()">
+
+        <div class="toggle-row">
+            <span>Include Meetup Fee?</span>
+            <label class="switch">
+                <input type="checkbox" id="meetupToggle" checked onchange="calculate()">
+                <span class="slider"></span>
+            </label>
+        </div>
 
         <div id="output">
             </div>
     </div>
 
-    <div class="card tips-section">
-        <h3>💡 How to Sell More & Fix Low Profit</h3>
-        <ul>
-            <li><b>Sell in Bundles:</b> If it's ₱50 each, offer 2 for ₱90 to increase volume.</li>
-            <li><b>Set a Minimum Order:</b> e.g., "Minimum order ₱100" avoids time-wasting small orders.</li>
-            <li><b>The "Free Meetup" Trick:</b> Offer free meetup for ₱300+ orders to push buyers to add one more item.</li>
-            <li><b>Separate Shipping:</b> Never include shipping costs in cheap item prices; charge it separately or via meetup fee.</li>
-        </ul>
-    </div>
+    <div id="dynamic-tips"></div>
+
 </div>
 
 <script>
@@ -175,7 +239,6 @@ const formatPHP = (num) => {
     return new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(num);
 };
 
-// Auto-round to nearest 5 (Rule #4)
 const roundUpPrice = (price) => {
     return Math.ceil(price / 5) * 5;
 };
@@ -184,11 +247,14 @@ function calculate() {
     let cost = parseFloat(document.getElementById("cost").value) || 0;
     let shipping = parseFloat(document.getElementById("shipping").value) || 0;
     let items = parseFloat(document.getElementById("items").value) || 1;
+    let includeMeetup = document.getElementById("meetupToggle").checked;
 
     let outputDiv = document.getElementById("output");
+    let tipsDiv = document.getElementById("dynamic-tips");
 
     if (cost === 0) {
         outputDiv.innerHTML = `<div class="result" style="color: #666; text-align: center;">Enter costs to calculate pricing.</div>`;
+        tipsDiv.innerHTML = ""; // Hide tips when empty
         return;
     }
 
@@ -213,25 +279,23 @@ function calculate() {
         minProfit = 200;
     }
 
-    // Apply Rounding Rule (e.g., 43 -> 45)
     let finalSellPrice = roundUpPrice(baseSellPrice);
     let profit = finalSellPrice - realCost;
 
-    // Calculate Meetup Fee based on Order Size
-    let meetupFee = 0;
+    // Calculate Meetup Fee based on Order Size & Toggle
     let meetupText = "";
-    if (finalSellPrice < 200) {
-        meetupFee = 30;
-        meetupText = "+ ₱30 Meetup Fee";
-    } else if (finalSellPrice < 300) {
-        meetupFee = 20;
-        meetupText = "+ ₱20 Meetup Fee";
+    if (!includeMeetup) {
+        meetupText = "Disabled (₱0)";
     } else {
-        meetupFee = 0;
-        meetupText = "FREE Meetup! 🎉";
+        if (finalSellPrice < 200) {
+            meetupText = "+ ₱30 Meetup Fee";
+        } else if (finalSellPrice < 300) {
+            meetupText = "+ ₱20 Meetup Fee";
+        } else {
+            meetupText = "FREE Meetup! 🎉";
+        }
     }
 
-    // Check Profit Status
     let isGoodProfit = profit >= minProfit;
     let statusHTML = isGoodProfit 
         ? `<span class="good">Good Profit</span>` 
@@ -264,6 +328,35 @@ function calculate() {
             <div style="text-align: right; margin-top: 5px; font-size: 14px;">
                 ${statusHTML}
             </div>
+        </div>
+    `;
+
+    // --- DYNAMIC TIPS ENGINE ---
+    let tips = [];
+
+    if (!isGoodProfit) {
+        tips.push(`<li><b style="color: #ff453a;">⚠️ Increase Price or Bundle:</b> Your profit is below the ₱${minProfit} minimum. Either raise the price to <b>${formatPHP(realCost + minProfit)}</b> or set a minimum order quantity to avoid wasting time.</li>`);
+    }
+
+    if (finalSellPrice < 200) {
+        // Suggest a bundle price by taking final price x 2 and subtracting a tiny bit to make it enticing
+        let bundlePrice = roundUpPrice((finalSellPrice * 2) * 0.9); 
+        tips.push(`<li><b>📦 Sell in Bundles:</b> To push volume on this cheap item, offer a bundle! Try selling "2 for ${formatPHP(bundlePrice)}".</li>`);
+        tips.push(`<li><b>🚫 Separate Shipping:</b> Remember, never absorb shipping costs on cheap items. Rely on the meetup fee or charge it directly.</li>`);
+    } else if (finalSellPrice >= 200 && finalSellPrice < 300) {
+        let differenceToFree = 300 - finalSellPrice;
+        tips.push(`<li><b>🎯 The "Free Meetup" Trick:</b> The price is ${formatPHP(finalSellPrice)}. Tell buyers if they add just <b>${formatPHP(differenceToFree)}</b> more to their order, their meetup is FREE!</li>`);
+    } else {
+        tips.push(`<li><b>⭐ High Value Item:</b> This order automatically qualifies for a free meetup. Emphasize this perk to seal the deal!</li>`);
+    }
+
+    // Render the tips card
+    tipsDiv.innerHTML = `
+        <div class="card tips-section">
+            <h3>💡 Strategy for this Item</h3>
+            <ul>
+                ${tips.join("")}
+            </ul>
         </div>
     `;
 }
