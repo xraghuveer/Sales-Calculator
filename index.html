@@ -6,7 +6,7 @@
 <title>Kitty Calculator</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700;800&family=Pacifico&display=swap');
 
 :root {
     --bg-dark: #000000;
@@ -16,10 +16,15 @@
     --text-muted: #a1a1aa;
     --neon-pink: #ff0066;
     --pink-glow: rgba(255, 0, 102, 0.3);
+
+    /* Font Definitions */
+    --font-header: 'Pacifico', cursive;
+    --font-variable: 'Inter', sans-serif;
+    --font-value: 'JetBrains Mono', monospace;
 }
 
 body {
-    font-family: 'Inter', -apple-system, sans-serif;
+    font-family: var(--font-variable);
     background: var(--bg-dark);
     color: var(--text-main);
     margin: 0;
@@ -33,11 +38,13 @@ body {
 }
 
 h1 {
+    font-family: var(--font-header);
     text-align: center;
-    font-size: 28px;
-    font-weight: 800;
-    margin-bottom: 20px;
-    letter-spacing: -0.5px;
+    font-size: 38px;
+    font-weight: 400;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+    color: var(--neon-pink);
 }
 
 .card {
@@ -46,6 +53,15 @@ h1 {
     border-radius: 16px;
     margin-bottom: 20px;
     border: 1px solid var(--border-dark);
+}
+
+.section-title {
+    font-family: var(--font-header);
+    color: var(--neon-pink);
+    font-size: 20px;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed var(--border-dark);
+    padding-bottom: 10px;
 }
 
 label.input-label {
@@ -58,7 +74,8 @@ label.input-label {
     letter-spacing: 0.5px;
 }
 
-input[type="number"] {
+input[type="number"], select {
+    font-family: var(--font-value); 
     width: 100%;
     padding: 12px;
     margin-top: 8px;
@@ -68,11 +85,31 @@ input[type="number"] {
     color: white;
     font-size: 16px;
     box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
     transition: all 0.2s ease-in-out;
 }
 
-input[type="number"]:focus {
+select {
+    font-family: var(--font-variable);
+    appearance: none;
+    cursor: pointer;
+}
+
+textarea {
+    font-family: var(--font-value);
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border-dark);
+    background: #0a0a0a;
+    color: var(--neon-pink);
+    font-size: 13px;
+    box-sizing: border-box;
+    resize: vertical;
+    cursor: pointer;
+}
+
+textarea:focus, input[type="number"]:focus, select:focus {
     outline: none;
     border-color: var(--neon-pink);
     box-shadow: 0 0 8px var(--pink-glow);
@@ -151,41 +188,62 @@ input:checked + .slider:before {
 .data-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.data-row span:first-child {
+    font-family: var(--font-variable);
     font-size: 15px;
+    color: var(--text-muted);
+}
+
+.data-row span:last-child {
+    font-family: var(--font-value);
+    font-size: 16px;
+    font-weight: 700;
 }
 
 .data-row.highlight {
-    font-size: 20px;
-    font-weight: 800;
     margin-top: 15px;
     padding-top: 15px;
     border-top: 1px dashed var(--neon-pink);
 }
 
+.data-row.highlight span:first-child {
+    color: var(--text-main);
+    font-weight: 600;
+}
+
 .data-row.highlight span:last-child {
+    font-size: 22px;
+    font-weight: 800;
     color: var(--neon-pink);
 }
 
-.bad { color: #ff453a; font-weight: 600; }
-.good { color: #32d74b; font-weight: 600; }
+.bad { color: #ff453a; font-family: var(--font-variable); font-weight: 600; }
+.good { color: #32d74b; font-family: var(--font-variable); font-weight: 600; }
 
 .category-badge {
     display: inline-block;
     background: rgba(255, 0, 102, 0.1);
     color: var(--neon-pink);
     border: 1px solid var(--neon-pink);
-    padding: 4px 10px;
+    padding: 6px 12px;
     border-radius: 6px;
     font-size: 12px;
     font-weight: 600;
     margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 /* Tips Section */
 .tips-section h3 {
-    font-size: 16px;
-    margin-bottom: 10px;
+    font-family: var(--font-header);
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 12px;
     color: var(--neon-pink);
 }
 
@@ -198,7 +256,11 @@ input:checked + .slider:before {
 }
 
 .tips-section li {
-    margin-bottom: 8px;
+    margin-bottom: 10px;
+}
+
+.tips-section b {
+    color: var(--text-main);
 }
 </style>
 </head>
@@ -209,16 +271,26 @@ input:checked + .slider:before {
     <h1>Kitty Calculator 🐾</h1>
 
     <div class="card">
-        <label class="input-label">Item Cost (₱)</label>
-        <input type="number" id="cost" min="0" placeholder="0" oninput="calculate()">
+        <label class="input-label" style="margin-top: 0;">Sales Mode</label>
+        <select id="mode" onchange="calculate()">
+            <option value="retail">🛒 Retail Pricing</option>
+            <option value="wholesale">📦 Wholesale Pricing (Facebook)</option>
+        </select>
 
-        <label class="input-label">Supplier Shipping (Total ₱)</label>
-        <input type="number" id="shipping" min="0" placeholder="0" oninput="calculate()">
+        <div style="margin-top: 25px;">
+            <div class="section-title">Calculate Cost</div>
+            
+            <label class="input-label">Unit Item Price (₱)</label>
+            <input type="number" id="cost" min="0" placeholder="0" oninput="calculate()">
 
-        <label class="input-label">Total Items Received</label>
-        <input type="number" id="items" min="1" value="1" oninput="calculate()">
+            <label class="input-label">Quantity Received</label>
+            <input type="number" id="items" min="1" value="1" oninput="calculate()">
 
-        <div class="toggle-row">
+            <label class="input-label">Total Supplier Shipping (₱)</label>
+            <input type="number" id="shipping" min="0" placeholder="0" oninput="calculate()">
+        </div>
+
+        <div class="toggle-row" id="meetup-container">
             <span>Include Meetup Fee?</span>
             <label class="switch">
                 <input type="checkbox" id="meetupToggle" checked onchange="calculate()">
@@ -244,121 +316,180 @@ const roundUpPrice = (price) => {
 };
 
 function calculate() {
-    let cost = parseFloat(document.getElementById("cost").value) || 0;
+    let mode = document.getElementById("mode").value;
+    let itemPrice = parseFloat(document.getElementById("cost").value) || 0;
+    let qty = parseFloat(document.getElementById("items").value) || 1;
     let shipping = parseFloat(document.getElementById("shipping").value) || 0;
-    let items = parseFloat(document.getElementById("items").value) || 1;
     let includeMeetup = document.getElementById("meetupToggle").checked;
 
     let outputDiv = document.getElementById("output");
     let tipsDiv = document.getElementById("dynamic-tips");
+    let meetupContainer = document.getElementById("meetup-container");
 
-    if (cost === 0) {
+    // Hide meetup toggle if in wholesale mode
+    if (mode === "wholesale") {
+        meetupContainer.style.display = "none";
+    } else {
+        meetupContainer.style.display = "flex";
+    }
+
+    if (itemPrice === 0) {
         outputDiv.innerHTML = `<div class="result" style="color: #666; text-align: center;">Enter costs to calculate pricing.</div>`;
-        tipsDiv.innerHTML = ""; // Hide tips when empty
+        tipsDiv.innerHTML = ""; 
         return;
     }
 
-    let realCost = cost + (shipping / items);
+    // Step 1: Calculate Real Cost
+    let realCost = itemPrice + (shipping / qty);
     
+    // Step 2: Determine Category
     let category = "";
-    let baseSellPrice = 0;
-    let minProfit = 0;
-
-    // Apply Cost Brackets & Multipliers
     if (realCost < 80) {
         category = "Small Item (Under ₱80)";
-        baseSellPrice = realCost * 1.5;
-        minProfit = 8;
     } else if (realCost <= 500) {
         category = "Medium Item (₱80 - ₱500)";
-        baseSellPrice = realCost * 1.5;
-        minProfit = 40;
     } else {
         category = "Big Item (₱500+)";
-        baseSellPrice = realCost * 1.6;
-        minProfit = 200;
     }
 
-    let finalSellPrice = roundUpPrice(baseSellPrice);
-    let profit = finalSellPrice - realCost;
+    if (mode === "retail") {
+        // --- RETAIL LOGIC ---
+        let baseSellPrice = 0;
+        let minProfit = 0;
 
-    // Calculate Meetup Fee based on Order Size & Toggle
-    let meetupText = "";
-    if (!includeMeetup) {
-        meetupText = "Disabled (₱0)";
-    } else {
-        if (finalSellPrice < 200) {
-            meetupText = "+ ₱30 Meetup Fee";
-        } else if (finalSellPrice < 300) {
-            meetupText = "+ ₱20 Meetup Fee";
+        if (realCost < 80) {
+            baseSellPrice = realCost * 1.5;
+            minProfit = 8;
+        } else if (realCost <= 500) {
+            baseSellPrice = realCost * 1.5;
+            minProfit = 40;
         } else {
-            meetupText = "FREE Meetup! 🎉";
+            baseSellPrice = realCost * 1.6;
+            minProfit = 200;
         }
-    }
 
-    let isGoodProfit = profit >= minProfit;
-    let statusHTML = isGoodProfit 
-        ? `<span class="good">Good Profit</span>` 
-        : `<span class="bad">BAD PROFIT (Below ₱${minProfit})</span>`;
+        let finalSellPrice = roundUpPrice(baseSellPrice);
+        let profit = finalSellPrice - realCost;
 
-    outputDiv.innerHTML = `
-        <div class="result">
-            <span class="category-badge">${category}</span>
-            
-            <div class="data-row">
-                <span>Real Unit Cost:</span>
-                <span>${formatPHP(realCost)}</span>
+        let meetupText = "";
+        if (!includeMeetup) {
+            meetupText = "Disabled";
+        } else {
+            if (finalSellPrice < 200) {
+                meetupText = "+ ₱30";
+            } else if (finalSellPrice < 300) {
+                meetupText = "+ ₱20";
+            } else {
+                meetupText = "FREE 🎉";
+            }
+        }
+
+        let isGoodProfit = profit >= minProfit;
+        let statusHTML = isGoodProfit 
+            ? `<span class="good">Good Profit</span>` 
+            : `<span class="bad">BAD PROFIT (Below ₱${minProfit})</span>`;
+
+        outputDiv.innerHTML = `
+            <div class="result">
+                <span class="category-badge">${category}</span>
+                
+                <div class="data-row">
+                    <span>Real Unit Cost:</span>
+                    <span>${formatPHP(realCost)}</span>
+                </div>
+                
+                <div class="data-row">
+                    <span>Est. Meetup Fee:</span>
+                    <span style="color: #a1a1aa;">${meetupText}</span>
+                </div>
+
+                <div class="data-row highlight">
+                    <span>Final Sell Price:</span>
+                    <span>${formatPHP(finalSellPrice)}</span>
+                </div>
+
+                <div class="data-row" style="margin-top: 15px;">
+                    <span>Net Profit:</span>
+                    <span>${formatPHP(profit)}</span>
+                </div>
+                
+                <div style="text-align: right; margin-top: 5px; font-size: 14px;">
+                    ${statusHTML}
+                </div>
             </div>
-            
-            <div class="data-row">
-                <span>Est. Meetup Fee:</span>
-                <span style="color: #a1a1aa;">${meetupText}</span>
+        `;
+
+        // Retail Tips Engine
+        let tips = [];
+        if (!isGoodProfit) {
+            tips.push(`<li><b style="color: #ff453a;">⚠️ Increase Price or Bundle:</b> Your profit is below the ₱${minProfit} minimum. Either raise the price to <span style="font-family: var(--font-value); font-weight: bold; color: var(--neon-pink);">${formatPHP(realCost + minProfit)}</span> or set a minimum order quantity.</li>`);
+        }
+        if (finalSellPrice < 200) {
+            let bundlePrice = roundUpPrice((finalSellPrice * 2) * 0.9); 
+            tips.push(`<li><b>📦 Sell in Bundles:</b> To push volume on this cheap item, offer a bundle! Try selling "2 for <span style="font-family: var(--font-value); font-weight: bold; color: var(--neon-pink);">${formatPHP(bundlePrice)}</span>".</li>`);
+            tips.push(`<li><b>🚫 Separate Shipping:</b> Remember, never absorb shipping costs on cheap items. Rely on the meetup fee.</li>`);
+        } else if (finalSellPrice >= 200 && finalSellPrice < 300) {
+            let differenceToFree = 300 - finalSellPrice;
+            tips.push(`<li><b>🎯 The "Free Meetup" Trick:</b> Tell buyers if they add just <span style="font-family: var(--font-value); font-weight: bold; color: var(--neon-pink);">${formatPHP(differenceToFree)}</span> more to their order, their meetup is FREE!</li>`);
+        } else {
+            tips.push(`<li><b>⭐ High Value Item:</b> This order automatically qualifies for a free meetup. Emphasize this perk to seal the deal!</li>`);
+        }
+
+        tipsDiv.innerHTML = `
+            <div class="card tips-section">
+                <h3>💡 Retail Strategy</h3>
+                <ul>${tips.join("")}</ul>
             </div>
+        `;
 
-            <div class="data-row highlight">
-                <span>Final Sell Price:</span>
-                <span>${formatPHP(finalSellPrice)}</span>
-            </div>
-
-            <div class="data-row" style="margin-top: 15px;">
-                <span>Net Profit:</span>
-                <span>${formatPHP(profit)}</span>
-            </div>
-            
-            <div style="text-align: right; margin-top: 5px; font-size: 14px;">
-                ${statusHTML}
-            </div>
-        </div>
-    `;
-
-    // --- DYNAMIC TIPS ENGINE ---
-    let tips = [];
-
-    if (!isGoodProfit) {
-        tips.push(`<li><b style="color: #ff453a;">⚠️ Increase Price or Bundle:</b> Your profit is below the ₱${minProfit} minimum. Either raise the price to <b>${formatPHP(realCost + minProfit)}</b> or set a minimum order quantity to avoid wasting time.</li>`);
-    }
-
-    if (finalSellPrice < 200) {
-        // Suggest a bundle price by taking final price x 2 and subtracting a tiny bit to make it enticing
-        let bundlePrice = roundUpPrice((finalSellPrice * 2) * 0.9); 
-        tips.push(`<li><b>📦 Sell in Bundles:</b> To push volume on this cheap item, offer a bundle! Try selling "2 for ${formatPHP(bundlePrice)}".</li>`);
-        tips.push(`<li><b>🚫 Separate Shipping:</b> Remember, never absorb shipping costs on cheap items. Rely on the meetup fee or charge it directly.</li>`);
-    } else if (finalSellPrice >= 200 && finalSellPrice < 300) {
-        let differenceToFree = 300 - finalSellPrice;
-        tips.push(`<li><b>🎯 The "Free Meetup" Trick:</b> The price is ${formatPHP(finalSellPrice)}. Tell buyers if they add just <b>${formatPHP(differenceToFree)}</b> more to their order, their meetup is FREE!</li>`);
     } else {
-        tips.push(`<li><b>⭐ High Value Item:</b> This order automatically qualifies for a free meetup. Emphasize this perk to seal the deal!</li>`);
-    }
+        // --- WHOLESALE LOGIC ---
+        let baseWholesale;
+        if (realCost < 80) {
+            baseWholesale = realCost + 8; // Flat margin for small items to stay competitive in bulk
+        } else if (realCost <= 500) {
+            baseWholesale = realCost * 1.15; // 15% markup base
+        } else {
+            baseWholesale = realCost * 1.10; // 10% markup base
+        }
 
-    // Render the tips card
-    tipsDiv.innerHTML = `
-        <div class="card tips-section">
-            <h3>💡 Strategy for this Item</h3>
-            <ul>
-                ${tips.join("")}
-            </ul>
-        </div>
-    `;
+        // Calculate MOQs
+        let moq5 = baseWholesale;
+        let moq10 = baseWholesale * 0.95; // 5% bulk discount
+        let moq20 = baseWholesale * 0.90; // 10% bulk discount
+        let moq50 = baseWholesale * 0.85; // 15% bulk discount
+
+        let fbText = `📦 WHOLESALE PRICE LIST 📦\n\n` +
+            `✅ MOQ 5 pcs: ${formatPHP(moq5)} each (Total: ${formatPHP(moq5 * 5)})\n` +
+            `✅ MOQ 10 pcs: ${formatPHP(moq10)} each (Total: ${formatPHP(moq10 * 10)})\n` +
+            `✅ MOQ 20 pcs: ${formatPHP(moq20)} each (Total: ${formatPHP(moq20 * 20)})\n` +
+            `✅ MOQ 50 pcs: ${formatPHP(moq50)} each (Total: ${formatPHP(moq50 * 50)})\n\n` +
+            `📩 Send us a message to order!`;
+
+        outputDiv.innerHTML = `
+            <div class="result">
+                <span class="category-badge">${category}</span>
+                <div class="data-row">
+                    <span>Real Unit Cost:</span>
+                    <span>${formatPHP(realCost)}</span>
+                </div>
+                
+                <label class="input-label" style="text-align: left; margin-top: 15px;">Copy for Facebook:</label>
+                <textarea rows="9" readonly onclick="this.select()">${fbText}</textarea>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 5px; text-align: right;">Click text to highlight and copy.</p>
+            </div>
+        `;
+        
+        tipsDiv.innerHTML = `
+            <div class="card tips-section">
+                <h3>💡 Wholesale Strategy</h3>
+                <ul>
+                    <li><b>Volume is Key:</b> Wholesale margins are smaller (${formatPHP(baseWholesale - realCost)} profit per unit at MOQ 5), but you make it up by moving 10-50 units at a time.</li>
+                    <li><b>Shipping:</b> Have the buyer cover courier costs (Lalamove, J&T) directly since bulk items are heavy.</li>
+                </ul>
+            </div>
+        `;
+    }
 }
 
 // Init
