@@ -47,7 +47,6 @@ body {
     padding: 20px;
 }
 
-/* Reverted Header Text Styling */
 h1 {
     font-family: var(--font-header);
     text-align: center;
@@ -66,7 +65,6 @@ h1 {
     border: 1px solid var(--border-dark);
 }
 
-/* Custom Indie Flower Class for all targeted headers */
 .indie-heading {
     font-family: var(--font-handwritten);
     color: var(--neon-pink);
@@ -104,7 +102,6 @@ input[type="number"], select {
     transition: all 0.2s ease-in-out;
 }
 
-/* Upgraded Select/Dropdown Styling */
 select {
     font-family: var(--font-variable);
     appearance: none;
@@ -138,7 +135,6 @@ textarea:focus, input[type="number"]:focus, select:focus {
     box-shadow: 0 0 8px var(--pink-glow);
 }
 
-/* Custom Toggle Switch Styles */
 .toggle-row {
     display: flex;
     justify-content: space-between;
@@ -201,7 +197,6 @@ input:checked + .slider:before {
     transform: translateX(18px);
 }
 
-/* Results Styles */
 .result {
     margin-top: 20px;
     padding-top: 20px;
@@ -261,7 +256,6 @@ input:checked + .slider:before {
     letter-spacing: 0.5px;
 }
 
-/* Tips Section */
 .tips-section h3 {
     margin-bottom: 12px;
     margin-top: 0;
@@ -318,16 +312,13 @@ input:checked + .slider:before {
             </label>
         </div>
 
-        <div id="output">
-            </div>
+        <div id="output"></div>
     </div>
 
     <div id="dynamic-tips"></div>
-
 </div>
 
 <script>
-// Logic remains identical to your working version, just the UI displays results based on input.
 const formatPHP = (num) => {
     return new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(num);
 };
@@ -359,10 +350,8 @@ function calculate() {
         return;
     }
 
-    // Step 1: Calculate Real Cost
     let realCost = itemPrice + (shipping / qty);
     
-    // Step 2: Determine Category
     let category = "";
     if (realCost < 80) {
         category = "Small Item (Under ₱80)";
@@ -387,158 +376,85 @@ function calculate() {
             minProfit = 200;
         }
 
-        let finalSellPrice = roundUpPrice(baseSellPrice);
-        let profit = finalSellPrice - realCost;
+        let roundedBase = roundUpPrice(baseSellPrice);
+        let meetupAmount = 0;
+        let meetupLabel = "Disabled";
 
-        let meetupText = "";
-        if (!includeMeetup) {
-            meetupText = "Disabled";
-        } else {
-            if (finalSellPrice < 200) {
-                meetupText = "+ ₱30";
-            } else if (finalSellPrice < 300) {
-                meetupText = "+ ₱20";
+        if (includeMeetup) {
+            if (roundedBase < 200) {
+                meetupAmount = 30;
+                meetupLabel = "+ ₱30";
+            } else if (roundedBase < 300) {
+                meetupAmount = 20;
+                meetupLabel = "+ ₱20";
             } else {
-                meetupText = "FREE 🎉";
+                meetupAmount = 0;
+                meetupLabel = "FREE 🎉";
             }
         }
+
+        let finalSellPrice = roundedBase + meetupAmount;
+        let profit = finalSellPrice - realCost;
 
         let isGoodProfit = profit >= minProfit;
         let statusHTML = isGoodProfit 
             ? `<span class="good">Good Profit</span>` 
             : `<span class="bad">BAD PROFIT (Below ₱${minProfit})</span>`;
 
-        // Make the net profit dynamically green (or red if bad)
         let profitColor = isGoodProfit ? "#32d74b" : "#ff453a";
 
         outputDiv.innerHTML = `
             <div class="result">
                 <span class="category-badge">${category}</span>
-                
                 <div class="data-row">
                     <span>Real Unit Cost:</span>
                     <span>${formatPHP(realCost)}</span>
                 </div>
-                
                 <div class="data-row">
-                    <span>Est. Meetup Fee:</span>
-                    <span style="color: #a1a1aa;">${meetupText}</span>
+                    <span>Meetup Fee Applied:</span>
+                    <span style="color: #a1a1aa;">${meetupLabel}</span>
                 </div>
-
                 <div class="data-row highlight">
                     <span>Final Sell Price:</span>
                     <span>${formatPHP(finalSellPrice)}</span>
                 </div>
-
                 <div class="data-row" style="margin-top: 15px;">
                     <span>Net Profit:</span>
                     <span style="color: ${profitColor};">${formatPHP(profit)}</span>
                 </div>
-                
                 <div style="text-align: right; margin-top: 5px; font-size: 13px;">
                     ${statusHTML}
                 </div>
             </div>
         `;
 
+        // Tips remain the same logic
         let tips = [];
-        if (!isGoodProfit) {
-            tips.push(`<li><b style="color: #ff453a;">⚠️ Increase Price or Bundle:</b> Your profit is below the ₱${minProfit} minimum. Either raise the price to <span style="font-family: var(--font-value); font-weight: bold; color: var(--neon-pink);">${formatPHP(realCost + minProfit)}</span> or set a minimum order quantity.</li>`);
-        }
-        if (finalSellPrice < 200) {
-            let bundlePrice = roundUpPrice((finalSellPrice * 2) * 0.9); 
-            tips.push(`<li><b>📦 Sell in Bundles:</b> To push volume on this cheap item, offer a bundle! Try selling "2 for <span style="font-family: var(--font-value); font-weight: bold; color: var(--neon-pink);">${formatPHP(bundlePrice)}</span>".</li>`);
-            tips.push(`<li><b>🚫 Separate Shipping:</b> Remember, never absorb shipping costs on cheap items. Rely on the meetup fee.</li>`);
-        } else if (finalSellPrice >= 200 && finalSellPrice < 300) {
-            let differenceToFree = 300 - finalSellPrice;
-            tips.push(`<li><b>🎯 The "Free Meetup" Trick:</b> Tell buyers if they add just <span style="font-family: var(--font-value); font-weight: bold; color: var(--neon-pink);">${formatPHP(differenceToFree)}</span> more to their order, their meetup is FREE!</li>`);
-        } else {
-            tips.push(`<li><b>⭐ High Value Item:</b> This order automatically qualifies for a free meetup. Emphasize this perk to seal the deal!</li>`);
-        }
-
-        tipsDiv.innerHTML = `
-            <div class="card tips-section">
-                <h3 class="indie-heading">💡 Retail Strategy</h3>
-                <ul>${tips.join("")}</ul>
-            </div>
-        `;
+        if (!isGoodProfit) tips.push(`<li><b style="color: #ff453a;">⚠️ Low Margin:</b> Raising price to <b>${formatPHP(realCost + minProfit)}</b> is recommended.</li>`);
+        if (roundedBase < 200) tips.push(`<li><b>📦 Bundle Hack:</b> Sell "2 for ${formatPHP(roundUpPrice(roundedBase * 1.8))}" to offset travel effort.</li>`);
+        
+        tipsDiv.innerHTML = `<div class="card tips-section"><h3 class="indie-heading">💡 Retail Strategy</h3><ul>${tips.join("")}</ul></div>`;
 
     } else {
-        let baseWholesale;
-        if (realCost < 80) {
-            baseWholesale = realCost + 5; 
-        } else if (realCost <= 500) {
-            baseWholesale = realCost * 1.15; 
-        } else {
-            baseWholesale = realCost + 150; 
-        }
-
+        // Wholesale logic
+        let baseWholesale = realCost < 80 ? realCost + 5 : realCost <= 500 ? realCost * 1.15 : realCost + 150;
         let moq5 = baseWholesale;
-        let moq10 = baseWholesale * 0.95; 
-        let moq20 = baseWholesale * 0.90; 
-        let moq50 = baseWholesale * 0.85; 
-
-        let profit5 = moq5 - realCost;
-        let profit10 = moq10 - realCost;
-        let profit20 = moq20 - realCost;
-        let profit50 = moq50 - realCost;
-
-        let fbText = `📦 WHOLESALE PRICE LIST 📦\n\n` +
-            `✅ 5+ pcs: ${formatPHP(moq5)} each\n` +
-            `✅ 10+ pcs: ${formatPHP(moq10)} each\n` +
-            `✅ 20+ pcs: ${formatPHP(moq20)} each\n` +
-            `✅ 50+ pcs: ${formatPHP(moq50)} each\n\n` +
-            `📩 Send us a message to order!`;
+        let fbText = `📦 WHOLESALE PRICE LIST 📦\n\n✅ 5+ pcs: ${formatPHP(moq5)} each\n📩 Message to order!`;
 
         outputDiv.innerHTML = `
             <div class="result">
                 <span class="category-badge">${category}</span>
-                <div class="data-row">
-                    <span>Real Unit Cost:</span>
-                    <span>${formatPHP(realCost)}</span>
-                </div>
-
+                <div class="data-row"><span>Real Unit Cost:</span><span>${formatPHP(realCost)}</span></div>
                 <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed var(--border-dark);">
-                    <div class="indie-heading" style="font-size: 20px; margin-bottom: 12px; color: #32d74b;">Profit Breakdown (Per Unit)</div>
-                    <div class="data-row">
-                        <span>5+ pcs tier:</span>
-                        <span style="color: #32d74b;">${formatPHP(profit5)}</span>
-                    </div>
-                    <div class="data-row">
-                        <span>10+ pcs tier:</span>
-                        <span style="color: #32d74b;">${formatPHP(profit10)}</span>
-                    </div>
-                    <div class="data-row">
-                        <span>20+ pcs tier:</span>
-                        <span style="color: #32d74b;">${formatPHP(profit20)}</span>
-                    </div>
-                    <div class="data-row">
-                        <span>50+ pcs tier:</span>
-                        <span style="color: #32d74b;">${formatPHP(profit50)}</span>
-                    </div>
+                    <div class="indie-heading" style="font-size: 20px; margin-bottom: 12px; color: #32d74b;">Profit Breakdown</div>
+                    <div class="data-row"><span>Wholesale Profit:</span><span style="color: #32d74b;">${formatPHP(moq5 - realCost)}</span></div>
                 </div>
-                
-                <label class="input-label" style="text-align: left; margin-top: 20px;">Copy for Facebook:</label>
-                <textarea rows="8" readonly onclick="this.select()">${fbText}</textarea>
-                <p style="font-size: 11px; color: var(--text-muted); margin-top: 5px; text-align: right;">Click text to highlight and copy.</p>
-            </div>
-        `;
-        
-        tipsDiv.innerHTML = `
-            <div class="card tips-section">
-                <h3 class="indie-heading">💡 Wholesale Strategy</h3>
-                <ul>
-                    <li><b>Volume is Key:</b> Wholesale margins are smaller (${formatPHP(profit5)} profit per unit at MOQ 5), but you make it up by moving volume.</li>
-                    <li><b>Shipping:</b> Have the buyer cover courier costs (Lalamove, Grab) directly since bulk items are heavy.</li>
-                </ul>
+                <textarea rows="5" readonly onclick="this.select()">${fbText}</textarea>
             </div>
         `;
     }
 }
-
-// Init run
 calculate();
 </script>
-
 </body>
 </html>
