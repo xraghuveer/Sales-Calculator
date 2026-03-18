@@ -59,11 +59,10 @@ h1 {
     border: 1px solid var(--border-dark);
 }
 
-/* Custom Indie Flower Class for all targeted headers */
 .indie-heading {
     font-family: var(--font-handwritten);
     color: var(--neon-pink);
-    font-size: 25px; /* Exactly matches Calculate Cost */
+    font-size: 25px; 
     letter-spacing: 1px;
     margin-bottom: 10px;
 }
@@ -97,7 +96,6 @@ input[type="number"], select {
     transition: all 0.2s ease-in-out;
 }
 
-/* Upgraded Select/Dropdown Styling */
 select {
     font-family: var(--font-variable);
     appearance: none;
@@ -131,7 +129,6 @@ textarea:focus, input[type="number"]:focus, select:focus {
     box-shadow: 0 0 8px var(--pink-glow);
 }
 
-/* Custom Toggle Switch Styles */
 .toggle-row {
     display: flex;
     justify-content: space-between;
@@ -194,7 +191,6 @@ input:checked + .slider:before {
     transform: translateX(18px);
 }
 
-/* Results Styles */
 .result {
     margin-top: 20px;
     padding-top: 20px;
@@ -254,9 +250,7 @@ input:checked + .slider:before {
     letter-spacing: 0.5px;
 }
 
-/* Tips Section */
 .tips-section h3 {
-    /* Removed the conflicting font-size so it inherits the 25px from .indie-heading */
     margin-bottom: 12px;
     margin-top: 0;
 }
@@ -468,11 +462,18 @@ function calculate() {
         let moq20 = baseWholesale * 0.90; 
         let moq50 = baseWholesale * 0.85; 
 
+        // Profits per tier
+        let profit5 = moq5 - realCost;
+        let profit10 = moq10 - realCost;
+        let profit20 = moq20 - realCost;
+        let profit50 = moq50 - realCost;
+
+        // Cleaned up Facebook Text (No totals, "X+ pcs" format)
         let fbText = `📦 WHOLESALE PRICE LIST 📦\n\n` +
-            `✅ MOQ 5 pcs: ${formatPHP(moq5)} each (Total: ${formatPHP(moq5 * 5)})\n` +
-            `✅ MOQ 10 pcs: ${formatPHP(moq10)} each (Total: ${formatPHP(moq10 * 10)})\n` +
-            `✅ MOQ 20 pcs: ${formatPHP(moq20)} each (Total: ${formatPHP(moq20 * 20)})\n` +
-            `✅ MOQ 50 pcs: ${formatPHP(moq50)} each (Total: ${formatPHP(moq50 * 50)})\n\n` +
+            `✅ 5+ pcs: ${formatPHP(moq5)} each\n` +
+            `✅ 10+ pcs: ${formatPHP(moq10)} each\n` +
+            `✅ 20+ pcs: ${formatPHP(moq20)} each\n` +
+            `✅ 50+ pcs: ${formatPHP(moq50)} each\n\n` +
             `📩 Send us a message to order!`;
 
         outputDiv.innerHTML = `
@@ -482,9 +483,29 @@ function calculate() {
                     <span>Real Unit Cost:</span>
                     <span>${formatPHP(realCost)}</span>
                 </div>
+
+                <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed var(--border-dark);">
+                    <div class="indie-heading" style="font-size: 20px; margin-bottom: 12px; color: #32d74b;">Profit Breakdown (Per Unit)</div>
+                    <div class="data-row">
+                        <span>5+ pcs tier:</span>
+                        <span style="color: #32d74b;">${formatPHP(profit5)}</span>
+                    </div>
+                    <div class="data-row">
+                        <span>10+ pcs tier:</span>
+                        <span style="color: #32d74b;">${formatPHP(profit10)}</span>
+                    </div>
+                    <div class="data-row">
+                        <span>20+ pcs tier:</span>
+                        <span style="color: #32d74b;">${formatPHP(profit20)}</span>
+                    </div>
+                    <div class="data-row">
+                        <span>50+ pcs tier:</span>
+                        <span style="color: #32d74b;">${formatPHP(profit50)}</span>
+                    </div>
+                </div>
                 
-                <label class="input-label" style="text-align: left; margin-top: 15px;">Copy for Facebook:</label>
-                <textarea rows="9" readonly onclick="this.select()">${fbText}</textarea>
+                <label class="input-label" style="text-align: left; margin-top: 20px;">Copy for Facebook:</label>
+                <textarea rows="8" readonly onclick="this.select()">${fbText}</textarea>
                 <p style="font-size: 11px; color: var(--text-muted); margin-top: 5px; text-align: right;">Click text to highlight and copy.</p>
             </div>
         `;
@@ -493,7 +514,7 @@ function calculate() {
             <div class="card tips-section">
                 <h3 class="indie-heading">💡 Wholesale Strategy</h3>
                 <ul>
-                    <li><b>Volume is Key:</b> Wholesale margins are smaller (${formatPHP(baseWholesale - realCost)} profit per unit at MOQ 5), but you make it up by moving volume.</li>
+                    <li><b>Volume is Key:</b> Wholesale margins are smaller, but you make it up by moving volume in a single transaction.</li>
                     <li><b>Shipping:</b> Have the buyer cover courier costs (Lalamove, Grab) directly since bulk items are heavy.</li>
                 </ul>
             </div>
