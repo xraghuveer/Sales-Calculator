@@ -54,7 +54,9 @@ h1 {
 }
 
 .card { background: var(--card-dark); padding: 20px; border-radius: 16px; margin-bottom: 20px; border: 1px solid var(--border-dark); }
-.indie-heading { font-family: var(--font-handwritten); color: var(--neon-pink); font-size: 25px; letter-spacing: 1px; margin-bottom: 10px; }
+
+/* 15% Smaller Indie Headings (was 25px, now 21px) */
+.indie-heading { font-family: var(--font-handwritten); color: var(--neon-pink); font-size: 21px; letter-spacing: 1px; margin-bottom: 10px; }
 .section-title { border-bottom: 1px dashed var(--border-dark); padding-bottom: 5px; }
 
 .btn-group { display: flex; gap: 8px; margin-top: 10px; }
@@ -108,10 +110,14 @@ input:checked + .slider:before { transform: translateX(18px); }
     <h1>Kitty Calculator 🐾</h1>
 
     <div class="card">
-        <label class="input-label" style="margin-top: 0; color: var(--neon-pink);">Product Details</label>
-        <input type="text" id="productName" placeholder="e.g. Satin Pillowcase with Zipper" oninput="calculate()">
+        <div class="indie-heading" style="margin-top: 0; margin-bottom: 5px;">Product Details</div>
+        
+        <div style="display: flex; gap: 8px; align-items: center;">
+            <input type="text" id="productName" placeholder="e.g. Satin Pillowcase with Zipper">
+            <button onclick="calculate()" class="action-btn">✨ Scout</button>
+        </div>
 
-        <div class="indie-heading" style="margin-top: 20px; margin-bottom: 5px;">Sales Mode</div>
+        <div class="indie-heading" style="margin-top: 25px; margin-bottom: 5px;">Sales Mode</div>
         <select id="mode" onchange="calculate()">
             <option value="retail">🛒 Retail Pricing</option>
             <option value="wholesale">📦 Wholesale Pricing (FB)</option>
@@ -216,8 +222,8 @@ function calculate() {
         if (standardRetailPrice < 200) tips.push(`<li><b>📦 Sell in Bundles:</b> Sell "2 for <span style="color: var(--neon-pink);">${formatPHP(roundUpPrice((finalSellPrice * 2) * 0.9))}</span>".</li>`);
         tipsDiv.innerHTML = `<div class="card tips-section"><h3 class="indie-heading">💡 Retail Strategy</h3><ul>${tips.join("")}</ul></div>`;
 
-        // FIXED RETAIL PROMPT
-        aiPrompt = `FB Marketplace Philippines RETAIL analysis for: ${productName}. My Unit Cost: PHP ${realCost.toFixed(2)}. My intended Retail Selling Price: PHP ${finalSellPrice.toFixed(2)}. Please determine the actual market average and output exactly: 1) A table with columns [My Cost | My Retail Price | AI's Est. Avg Market Retail Price | Min Price to Avoid Loss]. 2) A 2-sentence verdict evaluating if my specific retail price is competitive against the actual market. 3) A short, bulleted listing template.`;
+        // FIXED RETAIL PROMPT (Realistic minimum profit factored in)
+        aiPrompt = `FB Marketplace Philippines RETAIL analysis for: ${productName}. My Unit Cost: PHP ${realCost.toFixed(2)}. My intended Retail Selling Price: PHP ${finalSellPrice.toFixed(2)}. Please determine the actual market average and output exactly: 1) A table with columns [My Cost | My Retail Price | AI's Est. Avg Market Retail Price | Realistic Min Price (factoring basic overhead/effort)]. 2) A 2-sentence verdict evaluating if my specific retail price is competitive against the actual market. 3) A short, bulleted listing template.`;
 
     } else {
         let baseWholesale = realCost < 80 ? realCost + 5 : realCost <= 500 ? realCost * 1.15 : realCost + 150;
@@ -243,8 +249,8 @@ function calculate() {
         
         tipsDiv.innerHTML = `<div class="card tips-section"><h3 class="indie-heading">💡 Wholesale Strategy</h3><ul><li><b>Volume is Key:</b> Wholesale margins are smaller (${formatPHP(moq5 - realCost)} profit per unit at MOQ 5), but you make it up by moving volume.</li><li><b>Shipping:</b> Have the buyer cover courier costs (Lalamove, Grab) directly since bulk items are heavy.</li></ul></div>`;
 
-        // FIXED WHOLESALE PROMPT WITH CORRECT MARKET COMPARISON
-        aiPrompt = `FB Marketplace Philippines WHOLESALE analysis for: ${productName}. My Unit Cost: PHP ${realCost.toFixed(2)}. My intended Retail Price: PHP ${standardRetailPrice.toFixed(2)}. My intended Wholesale (MOQ 5) Price: PHP ${moq5.toFixed(2)}. Please determine the actual market averages and output exactly: 1) A table with columns [My Cost | My Wholesale Price | AI's Est. Avg Market Wholesale Price | AI's Est. Avg Market Retail Price | Reseller's Potential Profit | Min Wholesale Price to Avoid Loss]. 2) A 2-sentence verdict evaluating if my wholesale price leaves enough margin for resellers to compete against the actual market. 3) A short, bulleted FB listing template targeting resellers.`;
+        // FIXED WHOLESALE PROMPT (Realistic minimum profit factored in)
+        aiPrompt = `FB Marketplace Philippines WHOLESALE analysis for: ${productName}. My Unit Cost: PHP ${realCost.toFixed(2)}. My intended Retail Price: PHP ${standardRetailPrice.toFixed(2)}. My intended Wholesale (MOQ 5) Price: PHP ${moq5.toFixed(2)}. Please determine the actual market averages and output exactly: 1) A table with columns [My Cost | My Wholesale Price | AI's Est. Avg Market Wholesale Price | AI's Est. Avg Market Retail Price | Reseller's Potential Profit | Realistic Min Wholesale Price (factoring basic overhead/effort)]. 2) A 2-sentence verdict evaluating if my wholesale price leaves enough margin for resellers to compete against the actual market. 3) A short, bulleted FB listing template targeting resellers.`;
     }
 
     // --- APPEND THE MARKET RESEARCH BOX TO OUTPUT ---
@@ -274,8 +280,13 @@ function calculate() {
     `;
 }
 
-// Init run
-calculate();
+// Support triggering scout on Enter key
+document.getElementById("productName").addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    calculate();
+  }
+});
 </script>
 
 </body>
