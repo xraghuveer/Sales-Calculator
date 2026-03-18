@@ -44,7 +44,7 @@ body {
 h1 {
     font-family: var(--font-header);
     text-align: center;
-    font-size: 34px; /* Reduced from 38px */
+    font-size: 34px; 
     font-weight: 400;
     margin-bottom: 22px;
     letter-spacing: 1px;
@@ -59,11 +59,11 @@ h1 {
     border: 1px solid var(--border-dark);
 }
 
-/* Custom Indie Flower Class for targeted headers */
+/* Custom Indie Flower Class for all targeted headers */
 .indie-heading {
     font-family: var(--font-handwritten);
     color: var(--neon-pink);
-    font-size: 25px; /* Reduced from 28px */
+    font-size: 25px; /* Exactly matches Calculate Cost */
     letter-spacing: 1px;
     margin-bottom: 10px;
 }
@@ -74,7 +74,7 @@ h1 {
 }
 
 label.input-label {
-    font-size: 12px; /* Reduced from 13px */
+    font-size: 12px; 
     font-weight: 600;
     color: var(--text-muted);
     display: block;
@@ -86,13 +86,13 @@ label.input-label {
 input[type="number"], select {
     font-family: var(--font-value); 
     width: 100%;
-    padding: 10px; /* Slightly tighter padding */
+    padding: 10px; 
     margin-top: 8px;
     border-radius: 8px;
     border: 1px solid var(--border-dark);
     background: #0a0a0a;
     color: white;
-    font-size: 14px; /* Reduced from 16px */
+    font-size: 14px; 
     box-sizing: border-box;
     transition: all 0.2s ease-in-out;
 }
@@ -119,7 +119,7 @@ textarea {
     border: 1px solid var(--border-dark);
     background: #0a0a0a;
     color: var(--neon-pink);
-    font-size: 12px; /* Reduced from 13px */
+    font-size: 12px; 
     box-sizing: border-box;
     resize: vertical;
     cursor: pointer;
@@ -140,7 +140,7 @@ textarea:focus, input[type="number"]:focus, select:focus {
 }
 
 .toggle-row span {
-    font-size: 13px; /* Reduced from 14px */
+    font-size: 13px; 
     font-weight: 600;
     color: var(--text-main);
 }
@@ -148,7 +148,7 @@ textarea:focus, input[type="number"]:focus, select:focus {
 .switch {
     position: relative;
     display: inline-block;
-    width: 40px; /* Slightly smaller switch */
+    width: 40px; 
     height: 22px;
 }
 
@@ -210,13 +210,13 @@ input:checked + .slider:before {
 
 .data-row span:first-child {
     font-family: var(--font-variable);
-    font-size: 13px; /* Reduced from 15px */
+    font-size: 13px; 
     color: var(--text-muted);
 }
 
 .data-row span:last-child {
     font-family: var(--font-value);
-    font-size: 14px; /* Reduced from 16px */
+    font-size: 14px; 
     font-weight: 700;
 }
 
@@ -232,7 +232,7 @@ input:checked + .slider:before {
 }
 
 .data-row.highlight span:last-child {
-    font-size: 20px; /* Reduced from 22px */
+    font-size: 20px; 
     font-weight: 800;
     color: var(--neon-pink);
 }
@@ -247,7 +247,7 @@ input:checked + .slider:before {
     border: 1px solid var(--neon-pink);
     padding: 5px 10px;
     border-radius: 6px;
-    font-size: 11px; /* Reduced from 12px */
+    font-size: 11px; 
     font-weight: 600;
     margin-bottom: 15px;
     text-transform: uppercase;
@@ -256,7 +256,7 @@ input:checked + .slider:before {
 
 /* Tips Section */
 .tips-section h3 {
-    font-size: 30px; /* Reduced from 34px */
+    /* Removed the conflicting font-size so it inherits the 25px from .indie-heading */
     margin-bottom: 12px;
     margin-top: 0;
 }
@@ -264,7 +264,7 @@ input:checked + .slider:before {
 .tips-section ul {
     padding-left: 20px;
     margin: 0;
-    font-size: 13px; /* Reduced from 14px */
+    font-size: 13px; 
     color: #d1d5db;
     line-height: 1.6;
 }
