@@ -8,8 +8,6 @@
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#ff0066">
 <link rel="apple-touch-icon" href="kitty_pwa_icon.png">
-<link rel="icon" type="image/png" sizes="192x192" href="kitty_pwa_icon.png">
-<link rel="icon" type="image/png" sizes="512x512" href="kitty_pwa_icon.png">
 
 <style>
 /* Combined Font Imports */
@@ -26,329 +24,68 @@
     --neon-pink: #ff0066;
     --pink-glow: rgba(255, 0, 102, 0.3);
 
-    /* Font Definitions */
     --font-header: 'Pacifico', cursive;
     --font-handwritten: 'Indie Flower', cursive;
     --font-variable: 'Inter', sans-serif;
     --font-value: 'JetBrains Mono', monospace;
 }
 
-body {
-    font-family: var(--font-variable);
-    background: var(--bg-dark);
-    color: var(--text-main);
-    margin: 0;
-    padding: 0;
-}
+body { font-family: var(--font-variable); background: var(--bg-dark); color: var(--text-main); margin: 0; padding: 0; }
+.container { max-width: 480px; margin: auto; padding: 20px; }
 
-.container {
-    max-width: 480px;
-    margin: auto;
-    padding: 20px;
-}
+.kitty-header { border: none; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; margin-bottom: 22px; }
+.kitty-header img { max-height: 100px; max-width: 100%; object-fit: contain; }
 
-/* Image-based Header Container */
-.kitty-header {
-    border: none;
-    margin: 0;
-    padding: 0;
-    background: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 22px;
-}
-
-.kitty-header img {
-    max-height: 100px; 
-    max-width: 100%;
-    object-fit: contain;
-}
-
-.card {
-    background: var(--card-dark);
-    padding: 20px;
-    border-radius: 16px;
-    margin-bottom: 20px;
-    border: 1px solid var(--border-dark);
-}
-
-.indie-heading {
-    font-family: var(--font-handwritten);
-    color: var(--neon-pink);
-    font-size: 25px; 
-    letter-spacing: 1px;
-    margin-bottom: 10px;
-}
-
-.section-title {
-    border-bottom: 1px dashed var(--border-dark);
-    padding-bottom: 5px;
-}
+.card { background: var(--card-dark); padding: 20px; border-radius: 16px; margin-bottom: 20px; border: 1px solid var(--border-dark); }
+.indie-heading { font-family: var(--font-handwritten); color: var(--neon-pink); font-size: 25px; letter-spacing: 1px; margin-bottom: 10px; }
+.section-title { border-bottom: 1px dashed var(--border-dark); padding-bottom: 5px; }
 
 /* AI Helper Box Styles */
-#ai-helper {
-    background: linear-gradient(145deg, #1a050d, #000000);
-    border: 1px solid var(--neon-pink);
-    box-shadow: 0 0 10px var(--pink-glow);
-    display: none;
-    margin-bottom: 15px;
-}
+#ai-helper { background: linear-gradient(145deg, #1a050d, #000000); border: 1px solid var(--neon-pink); box-shadow: 0 0 10px var(--pink-glow); display: none; margin-bottom: 15px; }
+.market-grid { display: flex; justify-content: space-between; background: rgba(0,0,0,0.5); border-radius: 8px; padding: 12px; margin: 15px 0; border: 1px solid #333; }
+.market-col { text-align: center; flex: 1; }
+.market-col:not(:last-child) { border-right: 1px solid #333; }
+.market-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.market-val { font-family: var(--font-value); font-size: 14px; font-weight: 700; }
+.retail-suggestion { background: rgba(255,0,102,0.1); border-left: 3px solid var(--neon-pink); padding: 12px; font-size: 13px; line-height: 1.5; border-radius: 4px; }
 
-.market-grid {
-    display: flex;
-    justify-content: space-between;
-    background: rgba(0,0,0,0.5);
-    border-radius: 8px;
-    padding: 12px;
-    margin: 15px 0;
-    border: 1px solid #333;
-}
-
-.market-col {
-    text-align: center;
-    flex: 1;
-}
-
-.market-col:not(:last-child) {
-    border-right: 1px solid #333;
-}
-
-.market-label {
-    font-size: 10px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 4px;
-}
-
-.market-val {
-    font-family: var(--font-value);
-    font-size: 14px;
-    font-weight: 700;
-}
-
-.retail-suggestion {
-    background: rgba(255,0,102,0.1);
-    border-left: 3px solid var(--neon-pink);
-    padding: 12px;
-    font-size: 13px;
-    line-height: 1.5;
-    border-radius: 4px;
-}
-
-/* Comparison Buttons */
 .btn-group { display: flex; gap: 10px; margin-top: 15px; }
-.scout-btn {
-    flex: 1;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid var(--neon-pink);
-    background: transparent;
-    color: var(--neon-pink);
-    font-size: 11px;
-    font-weight: 700;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    transition: 0.3s;
-}
+.scout-btn { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--neon-pink); background: transparent; color: var(--neon-pink); font-size: 11px; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; transition: 0.3s; }
 .scout-btn:hover { background: var(--neon-pink); color: white; box-shadow: 0 0 15px var(--neon-pink); }
 
-label.input-label {
-    font-size: 12px; 
-    font-weight: 600;
-    color: var(--text-muted);
-    display: block;
-    margin-top: 15px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
+.action-btn { background: var(--neon-pink); color: white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; white-space: nowrap; font-family: var(--font-variable); transition: 0.3s;}
+.action-btn:hover { box-shadow: 0 0 10px var(--pink-glow); }
 
-input[type="text"], input[type="number"], select {
-    font-family: var(--font-value); 
-    width: 100%;
-    padding: 10px; 
-    margin-top: 8px;
-    border-radius: 8px;
-    border: 1px solid var(--border-dark);
-    background: #0a0a0a;
-    color: white;
-    font-size: 14px; 
-    box-sizing: border-box;
-    transition: all 0.2s ease-in-out;
-}
+label.input-label { font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-top: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+input[type="text"], input[type="number"], select { font-family: var(--font-value); width: 100%; padding: 10px; margin-top: 8px; border-radius: 8px; border: 1px solid var(--border-dark); background: #0a0a0a; color: white; font-size: 14px; box-sizing: border-box; transition: all 0.2s ease-in-out; }
+select { font-family: var(--font-variable); appearance: none; cursor: pointer; background-color: #1a1016; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff0066' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 14px center; background-size: 14px; padding-right: 40px; }
+textarea { font-family: var(--font-value); width: 100%; padding: 12px; margin-top: 15px; border-radius: 8px; border: 1px solid var(--border-dark); background: #0a0a0a; color: var(--neon-pink); font-size: 12px; box-sizing: border-box; resize: vertical; cursor: pointer; }
+textarea:focus, input[type="text"]:focus, input[type="number"]:focus, select:focus { outline: none; border-color: var(--neon-pink); box-shadow: 0 0 8px var(--pink-glow); }
 
-select {
-    font-family: var(--font-variable);
-    appearance: none;
-    cursor: pointer;
-    background-color: #1a1016; 
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff0066' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 14px center;
-    background-size: 14px;
-    padding-right: 40px; 
-}
+.toggle-row { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+.toggle-row span { font-size: 13px; font-weight: 600; color: var(--text-main); }
+.switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border-dark); transition: .3s; border-radius: 24px; }
+.slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
+input:checked + .slider { background-color: var(--neon-pink); }
+input:checked + .slider:before { transform: translateX(18px); }
 
-textarea {
-    font-family: var(--font-value);
-    width: 100%;
-    padding: 12px;
-    margin-top: 15px;
-    border-radius: 8px;
-    border: 1px solid var(--border-dark);
-    background: #0a0a0a;
-    color: var(--neon-pink);
-    font-size: 12px; 
-    box-sizing: border-box;
-    resize: vertical;
-    cursor: pointer;
-}
-
-textarea:focus, input[type="text"]:focus, input[type="number"]:focus, select:focus {
-    outline: none;
-    border-color: var(--neon-pink);
-    box-shadow: 0 0 8px var(--pink-glow);
-}
-
-.toggle-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.toggle-row span {
-    font-size: 13px; 
-    font-weight: 600;
-    color: var(--text-main);
-}
-
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 40px; 
-    height: 22px;
-}
-
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--border-dark);
-    transition: .3s;
-    border-radius: 24px;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 16px;
-    width: 16px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    transition: .3s;
-    border-radius: 50%;
-}
-
-input:checked + .slider {
-    background-color: var(--neon-pink);
-}
-
-input:focus + .slider {
-    box-shadow: 0 0 8px var(--pink-glow);
-}
-
-input:checked + .slider:before {
-    transform: translateX(18px);
-}
-
-.result {
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border-dark);
-}
-
-.data-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-}
-
-.data-row span:first-child {
-    font-family: var(--font-variable);
-    font-size: 13px; 
-    color: var(--text-muted);
-}
-
-.data-row span:last-child {
-    font-family: var(--font-value);
-    font-size: 14px; 
-    font-weight: 700;
-}
-
-.data-row.highlight {
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px dashed var(--neon-pink);
-}
-
-.data-row.highlight span:first-child {
-    color: var(--text-main);
-    font-weight: 600;
-}
-
-.data-row.highlight span:last-child {
-    font-size: 20px; 
-    font-weight: 800;
-    color: var(--neon-pink);
-}
+.result { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-dark); }
+.data-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.data-row span:first-child { font-family: var(--font-variable); font-size: 13px; color: var(--text-muted); }
+.data-row span:last-child { font-family: var(--font-value); font-size: 14px; font-weight: 700; }
+.data-row.highlight { margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--neon-pink); }
+.data-row.highlight span:first-child { color: var(--text-main); font-weight: 600; }
+.data-row.highlight span:last-child { font-size: 20px; font-weight: 800; color: var(--neon-pink); }
 
 .bad { color: #ff453a; font-family: var(--font-variable); font-weight: 600; }
 .good { color: #32d74b; font-family: var(--font-variable); font-weight: 600; }
+.category-badge { display: inline-block; background: rgba(255, 0, 102, 0.1); color: var(--neon-pink); border: 1px solid var(--neon-pink); padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-.category-badge {
-    display: inline-block;
-    background: rgba(255, 0, 102, 0.1);
-    color: var(--neon-pink);
-    border: 1px solid var(--neon-pink);
-    padding: 5px 10px;
-    border-radius: 6px;
-    font-size: 11px; 
-    font-weight: 600;
-    margin-bottom: 15px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.tips-section h3 {
-    margin-bottom: 12px;
-    margin-top: 0;
-}
-
-.tips-section ul {
-    padding-left: 20px;
-    margin: 0;
-    font-size: 13px; 
-    color: #d1d5db;
-    line-height: 1.6;
-}
-
-.tips-section li {
-    margin-bottom: 10px;
-}
+.tips-section h3 { margin-bottom: 12px; margin-top: 0; }
+.tips-section ul { padding-left: 20px; margin: 0; font-size: 13px; color: #d1d5db; line-height: 1.6; }
+.tips-section li { margin-bottom: 10px; }
 </style>
 </head>
 
@@ -363,15 +100,19 @@ input:checked + .slider:before {
         <div class="indie-heading" style="font-size: 20px;">✨ Kitty's Smart Scout</div>
         <div id="ai-content"></div>
         
-        <div class="btn-group">
+        <div class="btn-group" id="market-links" style="display:none;">
             <a id="shopeeBtn" target="_blank" class="scout-btn">🛒 SHOPEE</a>
             <a id="lazadaBtn" target="_blank" class="scout-btn">🛍️ LAZADA</a>
         </div>
     </div>
 
     <div class="card">
-        <label class="input-label" style="margin-top: 0; color: var(--neon-pink);">Product Details (e.g. Satin Pillowcase with Zipper)</label>
-        <input type="text" id="productName" placeholder="What are you selling?" oninput="calculate()">
+        <label class="input-label" style="margin-top: 0; color: var(--neon-pink);">Product Details</label>
+        
+        <div style="display: flex; gap: 8px; align-items: center;">
+            <input type="text" id="productName" placeholder="e.g. Satin Pillowcase with Zipper" style="margin-top: 8px;">
+            <button onclick="fetchScoutData()" class="action-btn" style="margin-top: 8px;">✨ Scout</button>
+        </div>
 
         <div class="indie-heading" style="margin-top: 20px; margin-bottom: 5px;">Sales Mode</div>
         <select id="mode" onchange="calculate()">
@@ -381,7 +122,6 @@ input:checked + .slider:before {
 
         <div style="margin-top: 25px;">
             <div class="indie-heading section-title">Calculate Cost</div>
-            
             <label class="input-label">Unit Item Price (₱)</label>
             <input type="number" id="cost" min="0" placeholder="0" oninput="calculate()">
 
@@ -412,7 +152,10 @@ input:checked + .slider:before {
 </div>
 
 <script>
-// "Brain" Data: Base products and modifiers that change the value
+// ==========================================
+// 🧠 LOCAL BRAIN: 100% FREE, NO API NEEDED
+// Add or change any items/prices here!
+// ==========================================
 const baseProducts = {
     "pillowcase": 40, "shirt": 150, "t-shirt": 150, "keychain": 30,
     "tote bag": 80, "mug": 90, "sticker": 15, "lip tint": 50,
@@ -428,35 +171,28 @@ const priceModifiers = {
 const formatPHP = (num) => new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(num);
 const roundUpPrice = (price) => Math.ceil(price / 5) * 5;
 
-function calculate() {
+// --- LOCAL SCOUT FUNCTION ---
+function fetchScoutData() {
     let nameInput = document.getElementById("productName").value.toLowerCase();
-    let mode = document.getElementById("mode").value;
-    let itemPrice = parseFloat(document.getElementById("cost").value) || 0;
-    let qty = parseFloat(document.getElementById("items").value) || 1;
-    let shipping = parseFloat(document.getElementById("shipping").value) || 0;
-    let includeMeetup = document.getElementById("meetupToggle").checked;
-
     let aiBox = document.getElementById("ai-helper");
     let aiContent = document.getElementById("ai-content");
-    let outputDiv = document.getElementById("output");
-    let tipsDiv = document.getElementById("dynamic-tips");
-    let meetupContainer = document.getElementById("meetup-container");
+    let marketLinks = document.getElementById("market-links");
 
-    if (mode === "wholesale") { meetupContainer.style.display = "none"; } 
-    else { meetupContainer.style.display = "flex"; }
+    if (nameInput.length < 3) return;
 
-    // --- AI SCOUT LOGIC ---
-    if (nameInput.length > 2) {
+    // Show loading state
+    aiBox.style.display = "block";
+    marketLinks.style.display = "none";
+    aiContent.innerHTML = `<p style="color: var(--neon-pink); text-align: center; font-family: var(--font-variable);">🔎 Scouting local market data...</p>`;
+
+    // Fake a 1-second delay so it feels like it's calculating/searching
+    setTimeout(() => {
         let matchedBaseKey = Object.keys(baseProducts).find(key => nameInput.includes(key));
         
         if (matchedBaseKey) {
-            aiBox.style.display = "block";
-            
-            // Start with base price
             let estimatedValue = baseProducts[matchedBaseKey];
             let foundModifiers = [];
 
-            // Add modifiers
             Object.keys(priceModifiers).forEach(mod => {
                 if (nameInput.includes(mod)) {
                     estimatedValue += priceModifiers[mod];
@@ -464,17 +200,10 @@ function calculate() {
                 }
             });
 
-            // Calculate Market Averages
-            let marketLow = roundUpPrice(estimatedValue * 0.75); // Cheap Shopee Dropshippers
-            let marketHigh = roundUpPrice(estimatedValue * 1.6); // Premium Lazada Mall
-            let marketAvg = roundUpPrice(estimatedValue * 1.15); // Standard average
-
-            // Retail Strategy Math
+            let marketLow = roundUpPrice(estimatedValue * 0.75); 
+            let marketHigh = roundUpPrice(estimatedValue * 1.6); 
+            let marketAvg = roundUpPrice(estimatedValue * 1.15); 
             let offlineRetailTarget = roundUpPrice((marketLow + marketAvg) / 2);
-
-            // Update Search Links
-            document.getElementById("shopeeBtn").href = `https://shopee.ph/search?keyword=${encodeURIComponent(nameInput)}`;
-            document.getElementById("lazadaBtn").href = `https://www.lazada.com.ph/tag/${encodeURIComponent(nameInput)}`;
 
             let modText = foundModifiers.length > 0 ? ` (+ added value for: ${foundModifiers.join(", ")})` : "";
 
@@ -500,18 +229,43 @@ function calculate() {
 
                 <div class="retail-suggestion">
                     <b>💡 Offline Retail Target: <span style="font-family:var(--font-value); font-size:15px;">${formatPHP(offlineRetailTarget)}</span></b><br>
-                    <span style="color:var(--text-muted); font-size:11px;">As an offline retailer, aim slightly below the online average. This makes it an instant impulse buy for customers while keeping you above the cheapest online sellers.</span>
+                    <span style="color:var(--text-muted); font-size:11px;">Aim slightly below the online average. This makes it an instant impulse buy for customers while keeping you above the cheapest online sellers.</span>
                 </div>
             `;
+
+            document.getElementById("shopeeBtn").href = `https://shopee.ph/search?keyword=${encodeURIComponent(nameInput)}`;
+            document.getElementById("lazadaBtn").href = `https://www.lazada.com.ph/tag/${encodeURIComponent(nameInput)}`;
+            marketLinks.style.display = "flex";
+
         } else {
-            aiBox.style.display = "none";
+            aiContent.innerHTML = `
+                <p style="color: var(--text-muted); text-align: center; font-family: var(--font-variable); font-size: 13px;">
+                    No specific pricing data found for "<b>${nameInput}</b>", but you can check live prices below:
+                </p>
+            `;
+            document.getElementById("shopeeBtn").href = `https://shopee.ph/search?keyword=${encodeURIComponent(nameInput)}`;
+            document.getElementById("lazadaBtn").href = `https://www.lazada.com.ph/tag/${encodeURIComponent(nameInput)}`;
+            marketLinks.style.display = "flex";
         }
-    } else {
-        aiBox.style.display = "none";
-    }
+    }, 800); // 800ms delay for effect
+}
 
 
-    // --- STANDARD CALCULATOR LOGIC ---
+// --- STANDARD CALCULATOR MATH ---
+function calculate() {
+    let mode = document.getElementById("mode").value;
+    let itemPrice = parseFloat(document.getElementById("cost").value) || 0;
+    let qty = parseFloat(document.getElementById("items").value) || 1;
+    let shipping = parseFloat(document.getElementById("shipping").value) || 0;
+    let includeMeetup = document.getElementById("meetupToggle").checked;
+
+    let outputDiv = document.getElementById("output");
+    let tipsDiv = document.getElementById("dynamic-tips");
+    let meetupContainer = document.getElementById("meetup-container");
+
+    if (mode === "wholesale") { meetupContainer.style.display = "none"; } 
+    else { meetupContainer.style.display = "flex"; }
+
     if (itemPrice === 0) {
         outputDiv.innerHTML = `<div class="result" style="color: #666; text-align: center;">Enter costs to calculate pricing.</div>`;
         tipsDiv.innerHTML = ""; 
@@ -519,24 +273,15 @@ function calculate() {
     }
 
     let realCost = itemPrice + (shipping / qty);
-    
-    let category = "";
-    if (realCost < 80) { category = "Small Item (Under ₱80)"; } 
-    else if (realCost <= 500) { category = "Medium Item (₱80 - ₱500)"; } 
-    else { category = "Big Item (₱500+)"; }
+    let category = realCost < 80 ? "Small Item (Under ₱80)" : realCost <= 500 ? "Medium Item (₱80 - ₱500)" : "Big Item (₱500+)";
 
     if (mode === "retail") {
-        let baseSellPrice = 0;
-        let minProfit = 0;
-
-        if (realCost < 80) { baseSellPrice = realCost + 10; minProfit = 8; } 
-        else if (realCost <= 500) { baseSellPrice = realCost * 1.25; minProfit = 40; } 
-        else { baseSellPrice = realCost + 300; minProfit = 200; }
-
+        let baseSellPrice = realCost < 80 ? realCost + 10 : realCost <= 500 ? realCost * 1.25 : realCost + 300;
+        let minProfit = realCost < 80 ? 8 : realCost <= 500 ? 40 : 200;
         let roundedBase = roundUpPrice(baseSellPrice);
+        
         let meetupAmount = 0;
         let meetupLabel = "Disabled";
-
         if (includeMeetup) {
             if (roundedBase < 200) { meetupAmount = 30; meetupLabel = "+ ₱30"; } 
             else if (roundedBase < 300) { meetupAmount = 20; meetupLabel = "+ ₱20"; } 
@@ -545,9 +290,7 @@ function calculate() {
 
         let finalSellPrice = roundedBase + meetupAmount;
         let profit = finalSellPrice - realCost;
-
         let isGoodProfit = profit >= minProfit;
-        let statusHTML = isGoodProfit ? `<span class="good">Good Profit</span>` : `<span class="bad">BAD PROFIT (Below ₱${minProfit})</span>`;
         let profitColor = isGoodProfit ? "#32d74b" : "#ff453a";
 
         outputDiv.innerHTML = `
@@ -557,15 +300,12 @@ function calculate() {
                 <div class="data-row"><span>Meetup Fee Applied:</span><span style="color: #a1a1aa;">${meetupLabel}</span></div>
                 <div class="data-row highlight"><span>Final Sell Price:</span><span>${formatPHP(finalSellPrice)}</span></div>
                 <div class="data-row" style="margin-top: 15px;"><span>Net Profit:</span><span style="color: ${profitColor};">${formatPHP(profit)}</span></div>
-                <div style="text-align: right; margin-top: 5px; font-size: 13px;">${statusHTML}</div>
             </div>
         `;
 
         let tips = [];
-        if (!isGoodProfit) tips.push(`<li><b style="color: #ff453a;">⚠️ Low Margin:</b> Raising price to <span style="font-family: var(--font-value); font-weight: bold; color: var(--neon-pink);">${formatPHP(realCost + minProfit)}</span> is recommended.</li>`);
-        if (roundedBase < 200) tips.push(`<li><b>📦 Sell in Bundles:</b> Sell "2 for <span style="font-family: var(--font-value); font-weight: bold; color: var(--neon-pink);">${formatPHP(roundUpPrice((finalSellPrice * 2) * 0.9))}</span>" to push volume.</li>`);
-        if (roundedBase >= 200 && roundedBase < 300) tips.push(`<li><b>🎯 The "Free Meetup" Trick:</b> Tell buyers if they add just <span style="font-family: var(--font-value); font-weight: bold; color: var(--neon-pink);">${formatPHP(300 - finalSellPrice)}</span> more, meetup is FREE!</li>`);
-        
+        if (!isGoodProfit) tips.push(`<li><b style="color: #ff453a;">⚠️ Low Margin:</b> Raise price to <span style="color: var(--neon-pink);">${formatPHP(realCost + minProfit)}</span>.</li>`);
+        if (roundedBase < 200) tips.push(`<li><b>📦 Sell in Bundles:</b> Sell "2 for <span style="color: var(--neon-pink);">${formatPHP(roundUpPrice((finalSellPrice * 2) * 0.9))}</span>".</li>`);
         tipsDiv.innerHTML = `<div class="card tips-section"><h3 class="indie-heading">💡 Retail Strategy</h3><ul>${tips.join("")}</ul></div>`;
 
     } else {
@@ -573,32 +313,24 @@ function calculate() {
         let moq5 = baseWholesale;
         let moq10 = baseWholesale * 0.95; 
         let moq20 = baseWholesale * 0.90; 
-        let moq50 = baseWholesale * 0.85; 
 
-        let fbText = `📦 WHOLESALE PRICE LIST 📦\n\n✅ 5+ pcs: ${formatPHP(moq5)} each\n✅ 10+ pcs: ${formatPHP(moq10)} each\n✅ 20+ pcs: ${formatPHP(moq20)} each\n✅ 50+ pcs: ${formatPHP(moq50)} each\n\n📩 Send us a message to order!`;
+        let fbText = `📦 WHOLESALE PRICE LIST 📦\n\n✅ 5+ pcs: ${formatPHP(moq5)} each\n✅ 10+ pcs: ${formatPHP(moq10)} each\n✅ 20+ pcs: ${formatPHP(moq20)} each\n\n📩 Send us a message to order!`;
 
         outputDiv.innerHTML = `
             <div class="result">
                 <span class="category-badge">${category}</span>
                 <div class="data-row"><span>Real Unit Cost:</span><span>${formatPHP(realCost)}</span></div>
                 <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed var(--border-dark);">
-                    <div class="indie-heading" style="font-size: 20px; margin-bottom: 12px; color: #32d74b;">Profit Breakdown (Per Unit)</div>
+                    <div class="indie-heading" style="font-size: 20px; margin-bottom: 12px; color: #32d74b;">Profit Breakdown</div>
                     <div class="data-row"><span>5+ pcs tier:</span><span style="color: #32d74b;">${formatPHP(moq5 - realCost)}</span></div>
                     <div class="data-row"><span>10+ pcs tier:</span><span style="color: #32d74b;">${formatPHP(moq10 - realCost)}</span></div>
                     <div class="data-row"><span>20+ pcs tier:</span><span style="color: #32d74b;">${formatPHP(moq20 - realCost)}</span></div>
-                    <div class="data-row"><span>50+ pcs tier:</span><span style="color: #32d74b;">${formatPHP(moq50 - realCost)}</span></div>
                 </div>
-                <label class="input-label" style="text-align: left; margin-top: 20px;">Copy for Facebook:</label>
-                <textarea rows="8" readonly onclick="this.select()">${fbText}</textarea>
-                <p style="font-size: 11px; color: var(--text-muted); margin-top: 5px; text-align: right;">Click text to highlight and copy.</p>
+                <textarea rows="6" readonly onclick="this.select()">${fbText}</textarea>
             </div>
         `;
-        
-        tipsDiv.innerHTML = `<div class="card tips-section"><h3 class="indie-heading">💡 Wholesale Strategy</h3><ul><li><b>Volume is Key:</b> Wholesale margins are smaller (${formatPHP(moq5 - realCost)} profit per unit at MOQ 5), but you make it up by moving volume.</li><li><b>Shipping:</b> Have the buyer cover courier costs (Lalamove, Grab) directly since bulk items are heavy.</li></ul></div>`;
     }
 }
-
-// Init run
 calculate();
 </script>
 
