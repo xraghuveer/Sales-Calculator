@@ -6,7 +6,10 @@
 <title>Kitty Calculator</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700;800&family=Pacifico&display=swap');
+/* Combined Font Imports */
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Pacifico&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700;800&display=swap');
 
 :root {
     --bg-dark: #000000;
@@ -19,7 +22,7 @@
 
     /* Font Definitions */
     --font-header: 'Pacifico', cursive;
-    --font-subheader: 'Caveat', cursive; /* Added Caveat! */
+    --font-handwritten: 'Indie Flower', cursive;
     --font-variable: 'Inter', sans-serif;
     --font-value: 'JetBrains Mono', monospace;
 }
@@ -56,11 +59,16 @@ h1 {
     border: 1px solid var(--border-dark);
 }
 
-.section-title {
-    font-family: var(--font-subheader); /* Applied Caveat */
+/* Custom Indie Flower Class for targeted headers */
+.indie-heading {
+    font-family: var(--font-handwritten);
     color: var(--neon-pink);
-    font-size: 32px; /* Caveat needs to be larger to read well */
+    font-size: 28px;
+    letter-spacing: 1px;
     margin-bottom: 10px;
+}
+
+.section-title {
     border-bottom: 1px dashed var(--border-dark);
     padding-bottom: 5px;
 }
@@ -89,10 +97,18 @@ input[type="number"], select {
     transition: all 0.2s ease-in-out;
 }
 
+/* Upgraded Select/Dropdown Styling */
 select {
     font-family: var(--font-variable);
     appearance: none;
     cursor: pointer;
+    background-color: #1a1016; /* Subtle dark pink/purple background tint */
+    /* Custom Neon Pink SVG Arrow */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff0066' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 16px;
+    padding-right: 40px; /* Space for the arrow */
 }
 
 textarea {
@@ -241,11 +257,8 @@ input:checked + .slider:before {
 
 /* Tips Section */
 .tips-section h3 {
-    font-family: var(--font-subheader); /* Applied Caveat here too! */
-    font-size: 34px;
-    font-weight: 700;
     margin-bottom: 12px;
-    color: var(--neon-pink);
+    margin-top: 0;
 }
 
 .tips-section ul {
@@ -272,14 +285,14 @@ input:checked + .slider:before {
     <h1>Kitty Calculator 🐾</h1>
 
     <div class="card">
-        <label class="input-label" style="margin-top: 0;">Sales Mode</label>
+        <div class="indie-heading" style="margin-top: 0; margin-bottom: 5px;">Sales Mode</div>
         <select id="mode" onchange="calculate()">
             <option value="retail">🛒 Retail Pricing</option>
             <option value="wholesale">📦 Wholesale Pricing (Facebook)</option>
         </select>
 
         <div style="margin-top: 25px;">
-            <div class="section-title">Calculate Cost</div>
+            <div class="indie-heading section-title">Calculate Cost</div>
             
             <label class="input-label">Unit Item Price (₱)</label>
             <input type="number" id="cost" min="0" placeholder="0" oninput="calculate()">
@@ -294,7 +307,7 @@ input:checked + .slider:before {
         <div class="toggle-row" id="meetup-container">
             <span>Include Meetup Fee?</span>
             <label class="switch">
-                <input type="checkbox" id="meetupToggle" checked onchange="calculate()">
+                <input type="checkbox" id="meetupToggle" onchange="calculate()">
                 <span class="slider"></span>
             </label>
         </div>
@@ -353,18 +366,17 @@ function calculate() {
     }
 
     if (mode === "retail") {
-        // --- NEW REFINED RETAIL LOGIC ---
         let baseSellPrice = 0;
         let minProfit = 0;
 
         if (realCost < 80) {
-            baseSellPrice = realCost + 10; // Flat +10 for small items
+            baseSellPrice = realCost + 10;
             minProfit = 8;
         } else if (realCost <= 500) {
-            baseSellPrice = realCost * 1.25; // 25% markup for medium
+            baseSellPrice = realCost * 1.25;
             minProfit = 40;
         } else {
-            baseSellPrice = realCost + 300; // Flat +300 for expensive items
+            baseSellPrice = realCost + 300;
             minProfit = 200;
         }
 
@@ -419,7 +431,6 @@ function calculate() {
             </div>
         `;
 
-        // Retail Tips Engine
         let tips = [];
         if (!isGoodProfit) {
             tips.push(`<li><b style="color: #ff453a;">⚠️ Increase Price or Bundle:</b> Your profit is below the ₱${minProfit} minimum. Either raise the price to <span style="font-family: var(--font-value); font-weight: bold; color: var(--neon-pink);">${formatPHP(realCost + minProfit)}</span> or set a minimum order quantity.</li>`);
@@ -437,27 +448,25 @@ function calculate() {
 
         tipsDiv.innerHTML = `
             <div class="card tips-section">
-                <h3>💡 Retail Strategy</h3>
+                <h3 class="indie-heading">💡 Retail Strategy</h3>
                 <ul>${tips.join("")}</ul>
             </div>
         `;
 
     } else {
-        // --- NEW REFINED WHOLESALE LOGIC ---
         let baseWholesale;
         if (realCost < 80) {
-            baseWholesale = realCost + 5; // Very tight margins for bulk cheap items
+            baseWholesale = realCost + 5; 
         } else if (realCost <= 500) {
-            baseWholesale = realCost * 1.15; // 15% markup base
+            baseWholesale = realCost * 1.15; 
         } else {
-            baseWholesale = realCost + 150; // Flat +150 for bulk expensive items
+            baseWholesale = realCost + 150; 
         }
 
-        // Calculate MOQs
         let moq5 = baseWholesale;
-        let moq10 = baseWholesale * 0.95; // 5% bulk discount
-        let moq20 = baseWholesale * 0.90; // 10% bulk discount
-        let moq50 = baseWholesale * 0.85; // 15% bulk discount
+        let moq10 = baseWholesale * 0.95; 
+        let moq20 = baseWholesale * 0.90; 
+        let moq50 = baseWholesale * 0.85; 
 
         let fbText = `📦 WHOLESALE PRICE LIST 📦\n\n` +
             `✅ MOQ 5 pcs: ${formatPHP(moq5)} each (Total: ${formatPHP(moq5 * 5)})\n` +
@@ -482,7 +491,7 @@ function calculate() {
         
         tipsDiv.innerHTML = `
             <div class="card tips-section">
-                <h3>💡 Wholesale Strategy</h3>
+                <h3 class="indie-heading">💡 Wholesale Strategy</h3>
                 <ul>
                     <li><b>Volume is Key:</b> Wholesale margins are smaller (${formatPHP(baseWholesale - realCost)} profit per unit at MOQ 5), but you make it up by moving volume.</li>
                     <li><b>Shipping:</b> Have the buyer cover courier costs (Lalamove, Grab) directly since bulk items are heavy.</li>
