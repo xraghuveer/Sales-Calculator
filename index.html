@@ -89,10 +89,6 @@ input:checked + .slider:before { transform: translateX(18px); }
 
 .category-badge { display: inline-block; background: rgba(255, 0, 102, 0.1); color: var(--neon-pink); border: 1px solid var(--neon-pink); padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-.tips-section h3 { margin-bottom: 12px; margin-top: 0; }
-.tips-section ul { padding-left: 20px; margin: 0; font-size: 13px; color: #d1d5db; line-height: 1.6; }
-.tips-section li { margin-bottom: 10px; }
-
 .market-research-box { margin-top: 25px; padding: 15px; background: linear-gradient(145deg, #1a050d, #000000); border: 1px solid var(--neon-pink); border-radius: 12px; }
 </style>
 </head>
@@ -180,6 +176,7 @@ function calculate() {
     let generalAiPrompt = "";
     let platformAiPrompt = "";
 
+    // UPDATED PROMPT LOGIC: Selling Locally on FB Marketplace Only
     if (mode === "retail") {
         let meetupAmount = 0;
         let meetupLabel = "Disabled";
@@ -201,10 +198,9 @@ function calculate() {
             </div>
         `;
 
-        // INSTRUCTION: Clear distinction that user is FB Seller looking for price protection
-        generalAiPrompt = `I am a Facebook Marketplace seller in the Philippines. Analyze the general market for: ${productName}. My Cost: ₱${realCost.toFixed(2)}. My Price: ₱${finalSellPrice.toFixed(2)}. Output: 1) Table [Cost | My Price | Avg Market Price | Realistic Min Price]. 2) Is it SUSTAINABLE to sell at this price on FB Marketplace? Should I PROCEED? 3) A short FB listing template.`;
+        generalAiPrompt = `I am a Facebook Marketplace seller in the Philippines selling LOCALLY ONLY (Meetup/Pick-up). Analyze the local market for: ${productName}. My Cost: ₱${realCost.toFixed(2)}. My Price: ₱${finalSellPrice.toFixed(2)}. Output: 1) Table [Cost | My Price | Avg Market Price | Realistic Min Price]. 2) Is it SUSTAINABLE for a local-only seller? Should I PROCEED? 3) A short FB listing template emphasizing local pickup.`;
 
-        platformAiPrompt = `I am a Facebook Marketplace seller. SPY on Shopee & Lazada Philippines prices for: ${productName}. I need to know if my FB Marketplace price of ₱${finalSellPrice.toFixed(2)} can compete considering Shopee/Lazada buyers pay shipping fees. Output: 1) Table [My FB Price | Avg Shopee Price | Avg Lazada Price | Realistic Min Price]. 2) Is my FB price SUSTAINABLE against these platforms? Should I PROCEED? 3) A short FB listing template emphasizing "No hidden shipping fees/Fast pickup".`;
+        platformAiPrompt = `I am a local-only Facebook Marketplace seller. SPY on Shopee/Lazada Philippines prices for: ${productName}. Compare my FB Price of ₱${finalSellPrice.toFixed(2)} vs their "Total Landed Price" (Item Price + Shipping). Output: 1) Table [My FB Price | Avg Shopee Price | Avg Lazada Price | Realistic Min Price]. 2) Is my price SUSTAINABLE considering the benefit of "Instant Pickup/No Shipping wait"? Should I PROCEED? 3) A short FB listing template emphasizing "Get it today - No waiting for shipping".`;
 
     } else {
         let baseWholesale = realCost < 80 ? realCost + 5 : realCost <= 500 ? realCost * 1.15 : realCost + 150;
@@ -219,9 +215,9 @@ function calculate() {
             </div>
         `;
 
-        generalAiPrompt = `I am a Facebook Wholesale supplier. Analyze the market for: ${productName}. My Cost: ₱${realCost.toFixed(2)}. My Wholesale (MOQ 5) Price: ₱${moq5.toFixed(2)}. Output: 1) Table [Cost | My Wholesale | Avg Market Wholesale | Realistic Min Wholesale]. 2) Is this SUSTAINABLE for me and my resellers? Should I PROCEED? 3) A wholesale listing template.`;
+        generalAiPrompt = `I am a Facebook Wholesale supplier selling LOCALLY ONLY to resellers. Analyze the market for: ${productName}. My Cost: ₱${realCost.toFixed(2)}. My Wholesale (MOQ 5) Price: ₱${moq5.toFixed(2)}. Output: 1) Table [Cost | My Wholesale | Avg Market Wholesale | Realistic Min Wholesale]. 2) Is this SUSTAINABLE for local resellers? Should I PROCEED? 3) A wholesale listing template for local buyers.`;
 
-        platformAiPrompt = `I am a Facebook Wholesale supplier. SPY on Shopee/Lazada BULK prices for: ${productName}. My Bulk Price: ₱${moq5.toFixed(2)}. Output: 1) Table [My FB Bulk | Shopee Bulk Avg | Lazada Bulk Avg | Realistic Min Bulk]. 2) Is my price SUSTAINABLE against platform prices? Should I PROCEED? 3) A wholesale listing template.`;
+        platformAiPrompt = `I am a local Facebook Wholesale supplier. SPY on Shopee/Lazada BULK prices for: ${productName}. My local Bulk Price is ₱${moq5.toFixed(2)}. Compare this vs their bulk prices including high shipping fees for heavy items. Output: 1) Table [My FB Bulk | Shopee Bulk Avg | Lazada Bulk Avg | Realistic Min Bulk]. 2) Is my price SUSTAINABLE for local resellers who want to avoid shipping delays? Should I PROCEED? 3) A wholesale listing template.`;
     }
 
     let activePrompt = window.usePlatformAI ? platformAiPrompt : generalAiPrompt;
@@ -232,7 +228,7 @@ function calculate() {
         <div class="market-research-box">
             <div class="indie-heading" style="font-size: 20px; text-align: center;">✨ Scout the Market</div>
             <div class="toggle-row" style="margin-top: 5px; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 15px;">
-                <span style="font-size: 12px; color: var(--text-muted);">Compare vs Shopee/Lazada prices?</span>
+                <span style="font-size: 12px; color: var(--text-muted);">Compare vs Shopee/Lazada?</span>
                 <label class="switch">
                     <input type="checkbox" onchange="window.usePlatformAI = this.checked; calculate()" ${toggleCheckedStr}>
                     <span class="slider"></span>
