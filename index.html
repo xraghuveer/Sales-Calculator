@@ -38,7 +38,7 @@ body {
     color: var(--text-main); 
     margin: 0; 
     padding: 0; 
-    zoom: 0.9; /* 💡 SCALES EVERYTHING DOWN BY 10% */
+    zoom: 0.9; /* SCALES EVERYTHING DOWN BY 10% */
 }
 .container { max-width: 480px; margin: auto; padding: 20px; }
 
@@ -153,7 +153,7 @@ const roundUpPrice = (price) => Math.ceil(price / 5) * 5;
 
 function calculate() {
     let rawProductName = document.getElementById("productName").value.trim();
-    let productName = rawProductName !== "" ? rawProductName : "this item"; // Fallback if empty
+    let productName = rawProductName !== "" ? rawProductName : "this item"; 
     
     let mode = document.getElementById("mode").value;
     let itemPrice = parseFloat(document.getElementById("cost").value) || 0;
@@ -174,28 +174,28 @@ function calculate() {
         return;
     }
 
+    // BASE CALCULATIONS
     let realCost = itemPrice + (shipping / qty);
     let category = realCost < 80 ? "Small Item (Under ₱80)" : realCost <= 500 ? "Medium Item (₱80 - ₱500)" : "Big Item (₱500+)";
 
-    // Variables for the Market Research AI Prompt
+    // ALWAYS CALCULATE RETAIL PRICE (even in wholesale mode, so the AI knows the market ceiling)
+    let baseRetailMath = realCost < 80 ? realCost + 10 : realCost <= 500 ? realCost * 1.25 : realCost + 300;
+    let standardRetailPrice = roundUpPrice(baseRetailMath);
+
     let aiPrompt = "";
-    let finalSellPrice = 0;
-    let moq5 = 0;
 
     if (mode === "retail") {
-        let baseSellPrice = realCost < 80 ? realCost + 10 : realCost <= 500 ? realCost * 1.25 : realCost + 300;
         let minProfit = realCost < 80 ? 8 : realCost <= 500 ? 40 : 200;
-        let roundedBase = roundUpPrice(baseSellPrice);
         
         let meetupAmount = 0;
         let meetupLabel = "Disabled";
         if (includeMeetup) {
-            if (roundedBase < 200) { meetupAmount = 30; meetupLabel = "+ ₱30"; } 
-            else if (roundedBase < 300) { meetupAmount = 20; meetupLabel = "+ ₱20"; } 
+            if (standardRetailPrice < 200) { meetupAmount = 30; meetupLabel = "+ ₱30"; } 
+            else if (standardRetailPrice < 300) { meetupAmount = 20; meetupLabel = "+ ₱20"; } 
             else { meetupAmount = 0; meetupLabel = "FREE 🎉"; }
         }
 
-        finalSellPrice = roundedBase + meetupAmount;
+        let finalSellPrice = standardRetailPrice + meetupAmount;
         let profit = finalSellPrice - realCost;
         let isGoodProfit = profit >= minProfit;
         let profitColor = isGoodProfit ? "#32d74b" : "#ff453a";
@@ -212,15 +212,14 @@ function calculate() {
 
         let tips = [];
         if (!isGoodProfit) tips.push(`<li><b style="color: #ff453a;">⚠️ Low Margin:</b> Raise price to <span style="color: var(--neon-pink);">${formatPHP(realCost + minProfit)}</span>.</li>`);
-        if (roundedBase < 200) tips.push(`<li><b>📦 Sell in Bundles:</b> Sell "2 for <span style="color: var(--neon-pink);">${formatPHP(roundUpPrice((finalSellPrice * 2) * 0.9))}</span>".</li>`);
+        if (standardRetailPrice < 200) tips.push(`<li><b>📦 Sell in Bundles:</b> Sell "2 for <span style="color: var(--neon-pink);">${formatPHP(roundUpPrice((finalSellPrice * 2) * 0.9))}</span>".</li>`);
         tipsDiv.innerHTML = `<div class="card tips-section"><h3 class="indie-heading">💡 Retail Strategy</h3><ul>${tips.join("")}</ul></div>`;
 
-        // Generate specific retail prompt asking for a table format
-        aiPrompt = `I am selling ${productName} on Facebook Marketplace in the Philippines. My unit cost is PHP ${realCost.toFixed(2)} and my planned selling price is PHP ${finalSellPrice.toFixed(2)}. Please present a pricing analysis in a clean table with the following columns: My Cost, My Planned Price, Average Market Price, and Absolute Minimum Price (to avoid loss/low profit). Below the table, briefly tell me if my price is competitive and how I should write the FB Marketplace listing to attract buyers.`;
+        aiPrompt = `FB Marketplace Philippines analysis for: ${productName}. My Cost: PHP ${realCost.toFixed(2)}. Selling Price: PHP ${finalSellPrice.toFixed(2)}. Output exactly: 1) A table with columns [My Cost | My Price | Avg Market Price | Min Price to Avoid Loss]. 2) A 2-sentence verdict on my competitiveness. 3) A short, bulleted listing template.`;
 
     } else {
         let baseWholesale = realCost < 80 ? realCost + 5 : realCost <= 500 ? realCost * 1.15 : realCost + 150;
-        moq5 = baseWholesale;
+        let moq5 = baseWholesale;
         let moq10 = baseWholesale * 0.95; 
         let moq20 = baseWholesale * 0.90; 
 
@@ -242,8 +241,8 @@ function calculate() {
         
         tipsDiv.innerHTML = `<div class="card tips-section"><h3 class="indie-heading">💡 Wholesale Strategy</h3><ul><li><b>Volume is Key:</b> Wholesale margins are smaller (${formatPHP(moq5 - realCost)} profit per unit at MOQ 5), but you make it up by moving volume.</li><li><b>Shipping:</b> Have the buyer cover courier costs (Lalamove, Grab) directly since bulk items are heavy.</li></ul></div>`;
 
-        // Generate specific wholesale prompt asking for a table format
-        aiPrompt = `I am selling ${productName} wholesale on Facebook Marketplace in the Philippines. My unit cost is PHP ${realCost.toFixed(2)} and my MOQ 5 wholesale price is PHP ${moq5.toFixed(2)}. Please present a pricing analysis in a clean table with the following columns: My Cost, My MOQ 5 Price, Average Wholesale Market Price, and Absolute Minimum Wholesale Price (to avoid loss/low profit). Below the table, briefly tell me if my pricing is competitive for resellers and how I should target them in my listing.`;
+        // OPTIMIZED WHOLESALE PROMPT WITH RETAIL PRICE CONTEXT
+        aiPrompt = `FB Marketplace Philippines WHOLESALE analysis for: ${productName}. My Unit Cost: PHP ${realCost.toFixed(2)}. Standard Retail Price for this item is around PHP ${standardRetailPrice.toFixed(2)}. My Wholesale (MOQ 5) Price is: PHP ${moq5.toFixed(2)}. Output exactly: 1) A table with columns [My Cost | MOQ 5 Price | Reseller's Potential Profit per piece | Min Wholesale Price to Avoid Loss]. 2) A 2-sentence verdict on if my MOQ 5 price leaves enough margin for resellers. 3) A short, bulleted FB listing template targeting resellers.`;
     }
 
     // --- APPEND THE MARKET RESEARCH BOX TO OUTPUT ---
@@ -251,7 +250,6 @@ function calculate() {
     let lazadaLink = `https://www.lazada.com.ph/catalog/?q=${encodeURIComponent(productName)}`;
     let googleLink = `https://www.google.com/search?q=${encodeURIComponent(aiPrompt)}`;
 
-    // Add visual warning if no product name was entered
     let warningText = rawProductName === "" ? `<div style="color: #ffcc00; font-size: 11px; margin-bottom: 8px; text-align: center;">⚠️ Tip: Enter a 'Product Name' at the top for better AI results!</div>` : "";
 
     outputDiv.innerHTML += `
