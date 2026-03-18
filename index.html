@@ -395,6 +395,9 @@ function calculate() {
             ? `<span class="good">Good Profit</span>` 
             : `<span class="bad">BAD PROFIT (Below ₱${minProfit})</span>`;
 
+        // Make the net profit dynamically green (or red if bad)
+        let profitColor = isGoodProfit ? "#32d74b" : "#ff453a";
+
         outputDiv.innerHTML = `
             <div class="result">
                 <span class="category-badge">${category}</span>
@@ -416,7 +419,7 @@ function calculate() {
 
                 <div class="data-row" style="margin-top: 15px;">
                     <span>Net Profit:</span>
-                    <span>${formatPHP(profit)}</span>
+                    <span style="color: ${profitColor};">${formatPHP(profit)}</span>
                 </div>
                 
                 <div style="text-align: right; margin-top: 5px; font-size: 13px;">
@@ -462,13 +465,11 @@ function calculate() {
         let moq20 = baseWholesale * 0.90; 
         let moq50 = baseWholesale * 0.85; 
 
-        // Profits per tier
         let profit5 = moq5 - realCost;
         let profit10 = moq10 - realCost;
         let profit20 = moq20 - realCost;
         let profit50 = moq50 - realCost;
 
-        // Cleaned up Facebook Text (No totals, "X+ pcs" format)
         let fbText = `📦 WHOLESALE PRICE LIST 📦\n\n` +
             `✅ 5+ pcs: ${formatPHP(moq5)} each\n` +
             `✅ 10+ pcs: ${formatPHP(moq10)} each\n` +
@@ -514,7 +515,7 @@ function calculate() {
             <div class="card tips-section">
                 <h3 class="indie-heading">💡 Wholesale Strategy</h3>
                 <ul>
-                    <li><b>Volume is Key:</b> Wholesale margins are smaller, but you make it up by moving volume in a single transaction.</li>
+                    <li><b>Volume is Key:</b> Wholesale margins are smaller (${formatPHP(profit5)} profit per unit at MOQ 5), but you make it up by moving volume.</li>
                     <li><b>Shipping:</b> Have the buyer cover courier costs (Lalamove, Grab) directly since bulk items are heavy.</li>
                 </ul>
             </div>
