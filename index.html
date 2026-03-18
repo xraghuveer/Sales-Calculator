@@ -47,7 +47,7 @@ h1 {
     text-align: center;
     font-size: 34px;
     font-weight: 400;
-    margin-top: 0; /* REMOVED TOP MARGIN HERE */
+    margin-top: 0;
     margin-bottom: 22px;
     letter-spacing: 1px;
     color: var(--neon-pink);
@@ -216,8 +216,8 @@ function calculate() {
         if (standardRetailPrice < 200) tips.push(`<li><b>📦 Sell in Bundles:</b> Sell "2 for <span style="color: var(--neon-pink);">${formatPHP(roundUpPrice((finalSellPrice * 2) * 0.9))}</span>".</li>`);
         tipsDiv.innerHTML = `<div class="card tips-section"><h3 class="indie-heading">💡 Retail Strategy</h3><ul>${tips.join("")}</ul></div>`;
 
-        // HYPER-OPTIMIZED RETAIL PROMPT
-        aiPrompt = `FB Marketplace Philippines analysis for: ${productName}. My Unit Cost: PHP ${realCost.toFixed(2)}. My intended Retail Selling Price: PHP ${finalSellPrice.toFixed(2)}. Output exactly: 1) A table with columns [My Cost | My Retail Price | Avg Market Retail Price | Min Price to Avoid Loss]. 2) A 2-sentence verdict evaluating if my specific retail price is competitive against the market. 3) A short, bulleted listing template.`;
+        // FIXED RETAIL PROMPT
+        aiPrompt = `FB Marketplace Philippines RETAIL analysis for: ${productName}. My Unit Cost: PHP ${realCost.toFixed(2)}. My intended Retail Selling Price: PHP ${finalSellPrice.toFixed(2)}. Please determine the actual market average and output exactly: 1) A table with columns [My Cost | My Retail Price | AI's Est. Avg Market Retail Price | Min Price to Avoid Loss]. 2) A 2-sentence verdict evaluating if my specific retail price is competitive against the actual market. 3) A short, bulleted listing template.`;
 
     } else {
         let baseWholesale = realCost < 80 ? realCost + 5 : realCost <= 500 ? realCost * 1.15 : realCost + 150;
@@ -243,8 +243,8 @@ function calculate() {
         
         tipsDiv.innerHTML = `<div class="card tips-section"><h3 class="indie-heading">💡 Wholesale Strategy</h3><ul><li><b>Volume is Key:</b> Wholesale margins are smaller (${formatPHP(moq5 - realCost)} profit per unit at MOQ 5), but you make it up by moving volume.</li><li><b>Shipping:</b> Have the buyer cover courier costs (Lalamove, Grab) directly since bulk items are heavy.</li></ul></div>`;
 
-        // HYPER-OPTIMIZED WHOLESALE PROMPT WITH RETAIL CONTEXT
-        aiPrompt = `FB Marketplace Philippines WHOLESALE analysis for: ${productName}. My Unit Cost: PHP ${realCost.toFixed(2)}. Standard Market Retail Price for this item is around PHP ${standardRetailPrice.toFixed(2)}. My intended Wholesale (MOQ 5) Selling Price: PHP ${moq5.toFixed(2)}. Output exactly: 1) A table with columns [My Cost | My Wholesale Price | Avg Market Wholesale Price | Reseller's Potential Profit | Min Wholesale Price to Avoid Loss]. 2) A 2-sentence verdict evaluating if my specific wholesale price leaves enough margin for resellers to compete. 3) A short, bulleted FB listing template targeting resellers.`;
+        // FIXED WHOLESALE PROMPT WITH CORRECT MARKET COMPARISON
+        aiPrompt = `FB Marketplace Philippines WHOLESALE analysis for: ${productName}. My Unit Cost: PHP ${realCost.toFixed(2)}. My intended Retail Price: PHP ${standardRetailPrice.toFixed(2)}. My intended Wholesale (MOQ 5) Price: PHP ${moq5.toFixed(2)}. Please determine the actual market averages and output exactly: 1) A table with columns [My Cost | My Wholesale Price | AI's Est. Avg Market Wholesale Price | AI's Est. Avg Market Retail Price | Reseller's Potential Profit | Min Wholesale Price to Avoid Loss]. 2) A 2-sentence verdict evaluating if my wholesale price leaves enough margin for resellers to compete against the actual market. 3) A short, bulleted FB listing template targeting resellers.`;
     }
 
     // --- APPEND THE MARKET RESEARCH BOX TO OUTPUT ---
