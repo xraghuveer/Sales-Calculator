@@ -105,7 +105,7 @@ input:checked + .slider:before { transform: translateX(18px); }
         <div class="btn-group" id="market-links" style="display:none;">
             <a id="shopeeBtn" target="_blank" class="scout-btn">🛒 SHOPEE</a>
             <a id="lazadaBtn" target="_blank" class="scout-btn">🛍️ LAZADA</a>
-            <a id="googleBtn" target="_blank" class="scout-btn">🌐 GOOGLE</a>
+            <a id="googleBtn" target="_blank" class="scout-btn">🧠 GOOGLE AI</a>
         </div>
     </div>
 
@@ -181,9 +181,9 @@ function generateScoutLinks() {
     document.getElementById("shopeeBtn").href = `https://shopee.ph/search?keyword=${encodeURIComponent(nameInput)}`;
     document.getElementById("lazadaBtn").href = `https://www.lazada.com.ph/catalog/?q=${encodeURIComponent(nameInput)}`;
     
-    // Formats google search replacing spaces with +
-    let googleQuery = nameInput.replace(/\s+/g, '+');
-    document.getElementById("googleBtn").href = `https://www.google.com/search?q=average+price+of+${googleQuery}+in+philippines`;
+    // Asks a specific question to force Google's AI Overview to answer at the top of the search results
+    let aiPrompt = `what is the average, lowest, and best retail price to sell ${nameInput} in the philippines`;
+    document.getElementById("googleBtn").href = `https://www.google.com/search?q=${encodeURIComponent(aiPrompt)}`;
 }
 
 
