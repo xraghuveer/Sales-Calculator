@@ -55,7 +55,7 @@ h1 {
 
 .card { background: var(--card-dark); padding: 20px; border-radius: 16px; margin-bottom: 20px; border: 1px solid var(--border-dark); }
 
-/* 15% Smaller Indie Headings (was 25px, now 21px) */
+/* 15% Smaller Indie Headings */
 .indie-heading { font-family: var(--font-handwritten); color: var(--neon-pink); font-size: 21px; letter-spacing: 1px; margin-bottom: 10px; }
 .section-title { border-bottom: 1px dashed var(--border-dark); padding-bottom: 5px; }
 
@@ -111,7 +111,6 @@ input:checked + .slider:before { transform: translateX(18px); }
 
     <div class="card">
         <div class="indie-heading" style="margin-top: 0; margin-bottom: 5px;">Product Details</div>
-        
         <input type="text" id="productName" placeholder="e.g. Satin Pillowcase with Zipper" oninput="calculate()">
 
         <div class="indie-heading" style="margin-top: 25px; margin-bottom: 5px;">Sales Mode</div>
@@ -152,6 +151,9 @@ input:checked + .slider:before { transform: translateX(18px); }
 </div>
 
 <script>
+// Global variable to track the new specific platform toggle
+window.usePlatformAI = false;
+
 const formatPHP = (num) => new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(num);
 const roundUpPrice = (price) => Math.ceil(price / 5) * 5;
 
@@ -182,11 +184,12 @@ function calculate() {
     let realCost = itemPrice + (shipping / qty);
     let category = realCost < 80 ? "Small Item (Under ₱80)" : realCost <= 500 ? "Medium Item (₱80 - ₱500)" : "Big Item (₱500+)";
 
-    // ALWAYS CALCULATE RETAIL PRICE (even in wholesale mode, so the AI knows the market ceiling)
+    // ALWAYS CALCULATE RETAIL PRICE
     let baseRetailMath = realCost < 80 ? realCost + 10 : realCost <= 500 ? realCost * 1.25 : realCost + 300;
     let standardRetailPrice = roundUpPrice(baseRetailMath);
 
-    let aiPrompt = "";
+    let generalAiPrompt = "";
+    let platformAiPrompt = "";
 
     if (mode === "retail") {
         let minProfit = realCost < 80 ? 8 : realCost <= 500 ? 40 : 200;
@@ -219,8 +222,11 @@ function calculate() {
         if (standardRetailPrice < 200) tips.push(`<li><b>📦 Sell in Bundles:</b> Sell "2 for <span style="color: var(--neon-pink);">${formatPHP(roundUpPrice((finalSellPrice * 2) * 0.9))}</span>".</li>`);
         tipsDiv.innerHTML = `<div class="card tips-section"><h3 class="indie-heading">💡 Retail Strategy</h3><ul>${tips.join("")}</ul></div>`;
 
-        // FIXED RETAIL PROMPT (Realistic minimum profit factored in)
-        aiPrompt = `FB Marketplace Philippines RETAIL analysis for: ${productName}. My Unit Cost: PHP ${realCost.toFixed(2)}. My intended Retail Selling Price: PHP ${finalSellPrice.toFixed(2)}. Please determine the actual market average and output exactly: 1) A table with columns [My Cost | My Retail Price | AI's Est. Avg Market Retail Price | Realistic Min Price (factoring basic overhead/effort)]. 2) A 2-sentence verdict evaluating if my specific retail price is competitive against the actual market. 3) A short, bulleted listing template.`;
+        // GENERAL AI PROMPT
+        generalAiPrompt = `FB Marketplace Philippines RETAIL analysis for: ${productName}. My Unit Cost: PHP ${realCost.toFixed(2)}. My intended Retail Selling Price: PHP ${finalSellPrice.toFixed(2)}. Please determine the actual market average and output exactly: 1) A table with columns [My Cost | My Retail Price | AI's Est. Avg Market Retail Price | Realistic Min Price (factoring basic overhead/effort)]. 2) A clear verdict explicitly stating if I should PROCEED with this price and if it is a GOOD, SUSTAINABLE long-term price against the actual market. 3) A short, bulleted listing template.`;
+
+        // PLATFORM AI PROMPT
+        platformAiPrompt = `Analyze prices specifically on Shopee Philippines, Lazada Philippines, and Facebook Marketplace for: ${productName}. My Unit Cost: PHP ${realCost.toFixed(2)}. My intended Retail Price: PHP ${finalSellPrice.toFixed(2)}. Output exactly: 1) A table with columns [My Cost | My Price | Avg Shopee/Lazada Price | Avg FB Price | Realistic Min Price]. 2) A clear verdict stating explicitly if I should PROCEED with my price based on these 3 platforms and if it's a SUSTAINABLE price. 3) A listing template.`;
 
     } else {
         let baseWholesale = realCost < 80 ? realCost + 5 : realCost <= 500 ? realCost * 1.15 : realCost + 150;
@@ -246,23 +252,36 @@ function calculate() {
         
         tipsDiv.innerHTML = `<div class="card tips-section"><h3 class="indie-heading">💡 Wholesale Strategy</h3><ul><li><b>Volume is Key:</b> Wholesale margins are smaller (${formatPHP(moq5 - realCost)} profit per unit at MOQ 5), but you make it up by moving volume.</li><li><b>Shipping:</b> Have the buyer cover courier costs (Lalamove, Grab) directly since bulk items are heavy.</li></ul></div>`;
 
-        // FIXED WHOLESALE PROMPT (Realistic minimum profit factored in)
-        aiPrompt = `FB Marketplace Philippines WHOLESALE analysis for: ${productName}. My Unit Cost: PHP ${realCost.toFixed(2)}. My intended Retail Price: PHP ${standardRetailPrice.toFixed(2)}. My intended Wholesale (MOQ 5) Price: PHP ${moq5.toFixed(2)}. Please determine the actual market averages and output exactly: 1) A table with columns [My Cost | My Wholesale Price | AI's Est. Avg Market Wholesale Price | AI's Est. Avg Market Retail Price | Reseller's Potential Profit | Realistic Min Wholesale Price (factoring basic overhead/effort)]. 2) A 2-sentence verdict evaluating if my wholesale price leaves enough margin for resellers to compete against the actual market. 3) A short, bulleted FB listing template targeting resellers.`;
+        // GENERAL AI PROMPT
+        generalAiPrompt = `FB Marketplace Philippines WHOLESALE analysis for: ${productName}. My Unit Cost: PHP ${realCost.toFixed(2)}. My intended Retail Price: PHP ${standardRetailPrice.toFixed(2)}. My intended Wholesale (MOQ 5) Price: PHP ${moq5.toFixed(2)}. Please determine the actual market averages and output exactly: 1) A table with columns [My Cost | My Wholesale Price | AI's Est. Avg Market Wholesale Price | AI's Est. Avg Market Retail Price | Reseller's Potential Profit | Realistic Min Wholesale Price (factoring overhead)]. 2) A clear verdict explicitly stating if I should PROCEED with this wholesale price and if it is a GOOD, SUSTAINABLE long-term margin for resellers. 3) A short, bulleted FB listing template targeting resellers.`;
+
+        // PLATFORM AI PROMPT
+        platformAiPrompt = `Analyze WHOLESALE/BULK prices specifically on Shopee Philippines, Lazada Philippines, and Facebook Marketplace for: ${productName}. My Unit Cost: PHP ${realCost.toFixed(2)}. My intended Wholesale (MOQ 5) Price: PHP ${moq5.toFixed(2)}. Output exactly: 1) A table with columns [My Cost | My MOQ 5 Price | Avg Shopee/Lazada Bulk Price | Avg FB Bulk Price | Realistic Min Bulk Price]. 2) A clear verdict stating explicitly if I should PROCEED with my wholesale price based on these platforms and if it's a SUSTAINABLE price for resellers. 3) A bulleted bulk listing template.`;
     }
 
-    // --- APPEND THE MARKET RESEARCH BOX TO OUTPUT ---
+    // Determine which prompt to use based on the toggle state
+    let activePrompt = window.usePlatformAI ? platformAiPrompt : generalAiPrompt;
+    let googleLink = `https://www.google.com/search?q=${encodeURIComponent(activePrompt)}`;
+    
     let shopeeLink = `https://shopee.ph/search?keyword=${encodeURIComponent(productName)}`;
     let lazadaLink = `https://www.lazada.com.ph/catalog/?q=${encodeURIComponent(productName)}`;
-    let googleLink = `https://www.google.com/search?q=${encodeURIComponent(aiPrompt)}`;
 
     let warningText = rawProductName === "" ? `<div style="color: #ffcc00; font-size: 11px; margin-bottom: 8px; text-align: center;">⚠️ Tip: Enter a 'Product Name' at the top for better AI results!</div>` : "";
+
+    // Toggle checked state string
+    let toggleCheckedStr = window.usePlatformAI ? "checked" : "";
 
     outputDiv.innerHTML += `
         <div class="market-research-box">
             <div class="indie-heading" style="font-size: 20px; text-align: center;">✨ Scout the Market</div>
             ${warningText}
-            <div style="font-size: 12px; color: var(--text-muted); text-align: center; margin-bottom: 12px;">
-                Have Google's AI analyze your profit margins and write your FB Marketplace listing:
+            
+            <div class="toggle-row" style="margin-top: 5px; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 15px;">
+                <span style="font-size: 12px; color: var(--text-muted);">Target Shopee/Lazada specifically?</span>
+                <label class="switch">
+                    <input type="checkbox" onchange="window.usePlatformAI = this.checked; calculate()" ${toggleCheckedStr}>
+                    <span class="slider"></span>
+                </label>
             </div>
             
             <a href="${googleLink}" target="_blank" class="scout-btn google-ai-btn" style="display: block; padding: 12px; font-size: 12px;">
@@ -270,14 +289,14 @@ function calculate() {
             </a>
             
             <div class="btn-group" style="margin-top: 10px;">
-                <a href="${shopeeLink}" target="_blank" class="scout-btn">🛒 SHOPEE</a>
-                <a href="${lazadaLink}" target="_blank" class="scout-btn">🛍️ LAZADA</a>
+                <a href="${shopeeLink}" target="_blank" class="scout-btn">🔎 SHOPEE MANUALLY</a>
+                <a href="${lazadaLink}" target="_blank" class="scout-btn">🔎 LAZADA MANUALLY</a>
             </div>
         </div>
     `;
 }
 
-// Support triggering scout on Enter key (still works, though input calculates automatically now too!)
+// Support triggering scout on Enter key 
 document.getElementById("productName").addEventListener("keypress", function(event) {
   if (event.key === "Enter") {
     event.preventDefault();
