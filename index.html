@@ -6,7 +6,7 @@
 <title>Kitty Calculator</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700;800&family=Pacifico&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700;800&family=Pacifico&display=swap');
 
 :root {
     --bg-dark: #000000;
@@ -19,6 +19,7 @@
 
     /* Font Definitions */
     --font-header: 'Pacifico', cursive;
+    --font-subheader: 'Caveat', cursive; /* Added Caveat! */
     --font-variable: 'Inter', sans-serif;
     --font-value: 'JetBrains Mono', monospace;
 }
@@ -56,12 +57,12 @@ h1 {
 }
 
 .section-title {
-    font-family: var(--font-header);
+    font-family: var(--font-subheader); /* Applied Caveat */
     color: var(--neon-pink);
-    font-size: 20px;
+    font-size: 32px; /* Caveat needs to be larger to read well */
     margin-bottom: 10px;
     border-bottom: 1px dashed var(--border-dark);
-    padding-bottom: 10px;
+    padding-bottom: 5px;
 }
 
 label.input-label {
@@ -240,9 +241,9 @@ input:checked + .slider:before {
 
 /* Tips Section */
 .tips-section h3 {
-    font-family: var(--font-header);
-    font-size: 24px;
-    font-weight: 400;
+    font-family: var(--font-subheader); /* Applied Caveat here too! */
+    font-size: 34px;
+    font-weight: 700;
     margin-bottom: 12px;
     color: var(--neon-pink);
 }
@@ -326,7 +327,6 @@ function calculate() {
     let tipsDiv = document.getElementById("dynamic-tips");
     let meetupContainer = document.getElementById("meetup-container");
 
-    // Hide meetup toggle if in wholesale mode
     if (mode === "wholesale") {
         meetupContainer.style.display = "none";
     } else {
@@ -353,18 +353,18 @@ function calculate() {
     }
 
     if (mode === "retail") {
-        // --- RETAIL LOGIC ---
+        // --- NEW REFINED RETAIL LOGIC ---
         let baseSellPrice = 0;
         let minProfit = 0;
 
         if (realCost < 80) {
-            baseSellPrice = realCost * 1.5;
+            baseSellPrice = realCost + 10; // Flat +10 for small items
             minProfit = 8;
         } else if (realCost <= 500) {
-            baseSellPrice = realCost * 1.5;
+            baseSellPrice = realCost * 1.25; // 25% markup for medium
             minProfit = 40;
         } else {
-            baseSellPrice = realCost * 1.6;
+            baseSellPrice = realCost + 300; // Flat +300 for expensive items
             minProfit = 200;
         }
 
@@ -443,14 +443,14 @@ function calculate() {
         `;
 
     } else {
-        // --- WHOLESALE LOGIC ---
+        // --- NEW REFINED WHOLESALE LOGIC ---
         let baseWholesale;
         if (realCost < 80) {
-            baseWholesale = realCost + 8; // Flat margin for small items to stay competitive in bulk
+            baseWholesale = realCost + 5; // Very tight margins for bulk cheap items
         } else if (realCost <= 500) {
             baseWholesale = realCost * 1.15; // 15% markup base
         } else {
-            baseWholesale = realCost * 1.10; // 10% markup base
+            baseWholesale = realCost + 150; // Flat +150 for bulk expensive items
         }
 
         // Calculate MOQs
@@ -484,8 +484,8 @@ function calculate() {
             <div class="card tips-section">
                 <h3>💡 Wholesale Strategy</h3>
                 <ul>
-                    <li><b>Volume is Key:</b> Wholesale margins are smaller (${formatPHP(baseWholesale - realCost)} profit per unit at MOQ 5), but you make it up by moving 10-50 units at a time.</li>
-                    <li><b>Shipping:</b> Have the buyer cover courier costs (Lalamove, J&T) directly since bulk items are heavy.</li>
+                    <li><b>Volume is Key:</b> Wholesale margins are smaller (${formatPHP(baseWholesale - realCost)} profit per unit at MOQ 5), but you make it up by moving volume.</li>
+                    <li><b>Shipping:</b> Have the buyer cover courier costs (Lalamove, Grab) directly since bulk items are heavy.</li>
                 </ul>
             </div>
         `;
