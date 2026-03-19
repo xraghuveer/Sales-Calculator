@@ -9,13 +9,9 @@
 <meta name="theme-color" content="#ff0066">
 <link rel="apple-touch-icon" href="kitty_pwa_icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="kitty_pwa_icon.png">
-<link rel="icon" type="image/png" sizes="512x512" href="kitty_pwa_icon.png">
 
 <style>
-/* Combined Font Imports */
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Pacifico&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Indie+Flower&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700;800&display=swap');
 
 :root {
     --bg-dark: #000000;
@@ -25,69 +21,39 @@
     --text-muted: #a1a1aa;
     --neon-pink: #ff0066;
     --pink-glow: rgba(255, 0, 102, 0.3);
-
-    --font-header: 'Pacifico', cursive;
-    --font-handwritten: 'Indie Flower', cursive;
-    --font-variable: 'Inter', sans-serif;
-    --font-value: 'JetBrains Mono', monospace;
 }
 
-body { 
-    font-family: var(--font-variable); 
-    background: var(--bg-dark); 
-    color: var(--text-main); 
-    margin: 0; 
-    padding: 0; 
-    zoom: 0.9; 
-}
+body { font-family: 'Inter', sans-serif; background: var(--bg-dark); color: var(--text-main); margin: 0; padding: 0; zoom: 0.9; }
 .container { max-width: 480px; margin: auto; padding: 20px; }
 
-h1 {
-    font-family: var(--font-header);
-    text-align: center;
-    font-size: 34px;
-    font-weight: 400;
-    margin-top: 0;
-    margin-bottom: 22px;
-    letter-spacing: 1px;
-    color: var(--neon-pink);
-}
+h1 { font-family: 'Pacifico', cursive; text-align: center; font-size: 34px; color: var(--neon-pink); margin-bottom: 22px; }
 
 .card { background: var(--card-dark); padding: 20px; border-radius: 16px; margin-bottom: 20px; border: 1px solid var(--border-dark); }
+.indie-heading { font-family: 'Indie Flower', cursive; color: var(--neon-pink); font-size: 21px; margin-bottom: 10px; }
 
-.indie-heading { font-family: var(--font-handwritten); color: var(--neon-pink); font-size: 21px; letter-spacing: 1px; margin-bottom: 10px; }
-.section-title { border-bottom: 1px dashed var(--border-dark); padding-bottom: 5px; }
-
-.btn-group { display: flex; gap: 8px; margin-top: 10px; }
-.scout-btn { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--neon-pink); background: transparent; color: var(--neon-pink); font-size: 10px; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; transition: 0.3s; }
+.scout-btn { display: block; width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--neon-pink); background: transparent; color: var(--neon-pink); font-size: 12px; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; margin-top: 10px; transition: 0.3s; box-sizing: border-box; }
 .scout-btn:hover { background: var(--neon-pink); color: white; box-shadow: 0 0 15px var(--neon-pink); }
 
-.google-ai-btn { background: linear-gradient(45deg, #ff0066, #9900ff); color: white; border: none; border-radius: 8px; font-weight: 800; }
-.google-ai-btn:hover { box-shadow: 0 0 15px #9900ff; }
+/* Reverse Image Search Button */
+.image-search-btn { background: #1a1a1a; border: 1px solid #444; color: #eee; margin-bottom: 15px; }
+.image-search-btn:hover { background: #333; border-color: #666; box-shadow: none; }
 
-label.input-label { font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-top: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
-input[type="text"], input[type="number"], select { font-family: var(--font-value); width: 100%; padding: 10px; margin-top: 8px; border-radius: 8px; border: 1px solid var(--border-dark); background: #0a0a0a; color: white; font-size: 14px; box-sizing: border-box; transition: all 0.2s ease-in-out; }
-select { font-family: var(--font-variable); appearance: none; cursor: pointer; background-color: #1a1016; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff0066' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 14px center; background-size: 14px; padding-right: 40px; }
-textarea { font-family: var(--font-value); width: 100%; padding: 12px; margin-top: 15px; border-radius: 8px; border: 1px solid var(--border-dark); background: #0a0a0a; color: var(--neon-pink); font-size: 12px; box-sizing: border-box; resize: vertical; cursor: pointer; }
+.google-ai-btn { background: linear-gradient(45deg, #ff0066, #9900ff); color: white; border: none; }
+
+label.input-label { font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-top: 15px; text-transform: uppercase; }
+input, select { font-family: 'JetBrains Mono', monospace; width: 100%; padding: 10px; margin-top: 8px; border-radius: 8px; border: 1px solid var(--border-dark); background: #0a0a0a; color: white; box-sizing: border-box; }
+textarea { font-family: 'JetBrains Mono', monospace; width: 100%; padding: 12px; margin-top: 15px; border-radius: 8px; border: 1px solid var(--border-dark); background: #0a0a0a; color: var(--neon-pink); font-size: 12px; resize: vertical; }
 
 .toggle-row { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
-.toggle-row span { font-size: 13px; font-weight: 600; color: var(--text-main); }
-.switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+.switch { position: relative; width: 40px; height: 22px; }
 .switch input { opacity: 0; width: 0; height: 0; }
 .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border-dark); transition: .3s; border-radius: 24px; }
 .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
 input:checked + .slider { background-color: var(--neon-pink); }
 input:checked + .slider:before { transform: translateX(18px); }
 
-.result { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-dark); }
-.data-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.data-row span:first-child { font-family: var(--font-variable); font-size: 13px; color: var(--text-muted); }
-.data-row span:last-child { font-family: var(--font-value); font-size: 14px; font-weight: 700; }
-.data-row.highlight { margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--neon-pink); }
-.data-row.highlight span:first-child { color: var(--text-main); font-weight: 600; }
-.data-row.highlight span:last-child { font-size: 20px; font-weight: 800; color: var(--neon-pink); }
-
-.category-badge { display: inline-block; background: rgba(255, 0, 102, 0.1); color: var(--neon-pink); border: 1px solid var(--neon-pink); padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+.data-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 13px; }
+.highlight { margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--neon-pink); color: var(--neon-pink); font-size: 20px; font-weight: 800; }
 
 .market-research-box { margin-top: 25px; padding: 15px; background: linear-gradient(145deg, #1a050d, #000000); border: 1px solid var(--neon-pink); border-radius: 12px; }
 </style>
@@ -99,56 +65,44 @@ input:checked + .slider:before { transform: translateX(18px); }
     <h1>Kitty Calculator 🐾</h1>
 
     <div class="card">
-        <div class="indie-heading" style="margin-top: 0; margin-bottom: 5px;">Product Details</div>
-        <input type="text" id="productName" placeholder="e.g. Satin Pillowcase with Zipper" oninput="calculate()">
+        <div class="indie-heading">Step 1: Identify Product</div>
+        <a href="https://lens.google.com/search?p" target="_blank" class="scout-btn image-search-btn">
+            📸 UPLOAD IMAGE TO FIND NAME
+        </a>
+        
+        <input type="text" id="productName" placeholder="Paste product name here..." oninput="calculate()">
 
-        <div class="indie-heading" style="margin-top: 25px; margin-bottom: 5px;">Sales Mode</div>
+        <div class="indie-heading" style="margin-top: 25px;">Step 2: Pricing</div>
         <select id="mode" onchange="calculate()">
             <option value="retail">🛒 Retail Pricing</option>
             <option value="wholesale">📦 Wholesale Pricing (FB)</option>
         </select>
 
-        <div style="margin-top: 25px;">
-            <div class="indie-heading section-title">Calculate Cost</div>
-            <label class="input-label">Unit Item Price (₱)</label>
-            <input type="number" id="cost" min="0" placeholder="0" oninput="calculate()">
+        <label class="input-label">Unit Item Price (₱)</label>
+        <input type="number" id="cost" placeholder="0" oninput="calculate()">
 
-            <div style="display: flex; gap: 10px;">
-                <div style="flex: 1;">
-                    <label class="input-label">Qty Received</label>
-                    <input type="number" id="items" min="1" value="1" oninput="calculate()">
-                </div>
-                <div style="flex: 2;">
-                    <label class="input-label">Supplier Shipping (₱)</label>
-                    <input type="number" id="shipping" min="0" placeholder="0" oninput="calculate()">
-                </div>
-            </div>
+        <div style="display: flex; gap: 10px;">
+            <div style="flex: 1;"><label class="input-label">Qty</label><input type="number" id="items" value="1" oninput="calculate()"></div>
+            <div style="flex: 2;"><label class="input-label">Supplier Ship (₱)</label><input type="number" id="shipping" placeholder="0" oninput="calculate()"></div>
         </div>
 
         <div class="toggle-row" id="meetup-container">
             <span>Include Meetup Fee?</span>
-            <label class="switch">
-                <input type="checkbox" id="meetupToggle" onchange="calculate()">
-                <span class="slider"></span>
-            </label>
+            <label class="switch"><input type="checkbox" id="meetupToggle" onchange="calculate()"><span class="slider"></span></label>
         </div>
 
         <div id="output"></div>
     </div>
-
-    <div id="dynamic-tips"></div>
 </div>
 
 <script>
 window.usePlatformAI = false;
-
 const formatPHP = (num) => new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(num);
 const roundUpPrice = (price) => Math.ceil(price / 5) * 5;
 
 function calculate() {
     let rawProductName = document.getElementById("productName").value.trim();
     let productName = rawProductName !== "" ? rawProductName : "this item"; 
-    
     let mode = document.getElementById("mode").value;
     let itemPrice = parseFloat(document.getElementById("cost").value) || 0;
     let qty = parseFloat(document.getElementById("items").value) || 1;
@@ -156,91 +110,42 @@ function calculate() {
     let includeMeetup = document.getElementById("meetupToggle").checked;
 
     let outputDiv = document.getElementById("output");
-    let tipsDiv = document.getElementById("dynamic-tips");
-    let meetupContainer = document.getElementById("meetup-container");
-
-    if (mode === "wholesale") { meetupContainer.style.display = "none"; } 
-    else { meetupContainer.style.display = "flex"; }
-
-    if (itemPrice === 0) {
-        outputDiv.innerHTML = `<div class="result" style="color: #666; text-align: center;">Enter costs to calculate pricing.</div>`;
-        tipsDiv.innerHTML = ""; 
-        return;
-    }
+    if (itemPrice === 0) { outputDiv.innerHTML = ""; return; }
 
     let realCost = itemPrice + (shipping / qty);
-    let category = realCost < 80 ? "Small Item (Under ₱80)" : realCost <= 500 ? "Medium Item (₱80 - ₱500)" : "Big Item (₱500+)";
     let baseRetailMath = realCost < 80 ? realCost + 10 : realCost <= 500 ? realCost * 1.25 : realCost + 300;
     let standardRetailPrice = roundUpPrice(baseRetailMath);
 
-    let generalAiPrompt = "";
-    let platformAiPrompt = "";
-
-    // UPDATED PROMPT LOGIC: Selling Locally on FB Marketplace Only
     if (mode === "retail") {
-        let meetupAmount = 0;
-        let meetupLabel = "Disabled";
-        if (includeMeetup) {
-            if (standardRetailPrice < 200) { meetupAmount = 30; } 
-            else if (standardRetailPrice < 300) { meetupAmount = 20; }
-            meetupLabel = meetupAmount > 0 ? `+ ₱${meetupAmount}` : "FREE 🎉";
-        }
+        let meetupAmount = includeMeetup ? (standardRetailPrice < 200 ? 30 : standardRetailPrice < 300 ? 20 : 0) : 0;
         let finalSellPrice = standardRetailPrice + meetupAmount;
-        let profit = finalSellPrice - realCost;
-
         outputDiv.innerHTML = `
-            <div class="result">
-                <span class="category-badge">${category}</span>
-                <div class="data-row"><span>Real Unit Cost:</span><span>${formatPHP(realCost)}</span></div>
-                <div class="data-row"><span>Meetup Fee Applied:</span><span style="color: #a1a1aa;">${meetupLabel}</span></div>
-                <div class="data-row highlight"><span>Final Sell Price:</span><span>${formatPHP(finalSellPrice)}</span></div>
-                <div class="data-row" style="margin-top: 15px;"><span>Net Profit:</span><span style="color: #32d74b;">${formatPHP(profit)}</span></div>
-            </div>
-        `;
+            <div class="result" style="margin-top:20px; border-top:1px solid #333; padding-top:15px;">
+                <div class="data-row"><span>Unit Cost:</span><span>${formatPHP(realCost)}</span></div>
+                <div class="highlight"><span style="font-size:12px; color:white; display:block;">Final Sell Price:</span>${formatPHP(finalSellPrice)}</div>
+            </div>`;
 
-        generalAiPrompt = `I am a Facebook Marketplace seller in the Philippines selling LOCALLY ONLY (Meetup/Pick-up). Analyze the local market for: ${productName}. My Cost: ₱${realCost.toFixed(2)}. My Price: ₱${finalSellPrice.toFixed(2)}. Output: 1) Table [Cost | My Price | Avg Market Price | Realistic Min Price]. 2) Is it SUSTAINABLE for a local-only seller? Should I PROCEED? 3) A short FB listing template emphasizing local pickup.`;
-
-        platformAiPrompt = `I am a local-only Facebook Marketplace seller. SPY on Shopee/Lazada Philippines prices for: ${productName}. Compare my FB Price of ₱${finalSellPrice.toFixed(2)} vs their "Total Landed Price" (Item Price + Shipping). Output: 1) Table [My FB Price | Avg Shopee Price | Avg Lazada Price | Realistic Min Price]. 2) Is my price SUSTAINABLE considering the benefit of "Instant Pickup/No Shipping wait"? Should I PROCEED? 3) A short FB listing template emphasizing "Get it today - No waiting for shipping".`;
-
+        window.generalPrompt = `I sell on FB Marketplace LOCALLY ONLY. Analyze market for: ${productName}. My Cost: ₱${realCost.toFixed(2)}. My Price: ₱${finalSellPrice.toFixed(2)}. Output: Table [Cost | My Price | Avg Market | Min Price]. Is it SUSTAINABLE? Should I PROCEED?`;
+        window.platformPrompt = `I am a local FB seller. SPY on Shopee/Lazada for: ${productName}. Compare my Price ₱${finalSellPrice.toFixed(2)} vs their "Item + Shipping" cost. Is my price SUSTAINABLE for instant local pickup? Should I PROCEED?`;
     } else {
-        let baseWholesale = realCost < 80 ? realCost + 5 : realCost <= 500 ? realCost * 1.15 : realCost + 150;
-        let moq5 = baseWholesale;
-        let fbText = `📦 WHOLESALE PRICE LIST 📦\n\n✅ 5+ pcs: ${formatPHP(moq5)} each\n✅ 10+ pcs: ${formatPHP(moq5 * 0.95)} each\n✅ 20+ pcs: ${formatPHP(moq5 * 0.90)} each\n\n📩 Send us a message to order!`;
-
-        outputDiv.innerHTML = `
-            <div class="result">
-                <span class="category-badge">${category}</span>
-                <div class="data-row"><span>Real Unit Cost:</span><span>${formatPHP(realCost)}</span></div>
-                <textarea rows="6" readonly onclick="this.select()">${fbText}</textarea>
-            </div>
-        `;
-
-        generalAiPrompt = `I am a Facebook Wholesale supplier selling LOCALLY ONLY to resellers. Analyze the market for: ${productName}. My Cost: ₱${realCost.toFixed(2)}. My Wholesale (MOQ 5) Price: ₱${moq5.toFixed(2)}. Output: 1) Table [Cost | My Wholesale | Avg Market Wholesale | Realistic Min Wholesale]. 2) Is this SUSTAINABLE for local resellers? Should I PROCEED? 3) A wholesale listing template for local buyers.`;
-
-        platformAiPrompt = `I am a local Facebook Wholesale supplier. SPY on Shopee/Lazada BULK prices for: ${productName}. My local Bulk Price is ₱${moq5.toFixed(2)}. Compare this vs their bulk prices including high shipping fees for heavy items. Output: 1) Table [My FB Bulk | Shopee Bulk Avg | Lazada Bulk Avg | Realistic Min Bulk]. 2) Is my price SUSTAINABLE for local resellers who want to avoid shipping delays? Should I PROCEED? 3) A wholesale listing template.`;
+        let moq5 = roundUpPrice(realCost < 80 ? realCost + 5 : realCost <= 500 ? realCost * 1.15 : realCost + 150);
+        outputDiv.innerHTML = `<textarea rows="4" readonly onclick="this.select()">📦 WHOLESALE (Local Only)\n✅ 5+ pcs: ${formatPHP(moq5)} each\n✅ 10+ pcs: ${formatPHP(moq5*0.95)} each\n📩 Message to order!</textarea>`;
+        window.generalPrompt = `Wholesale analysis for: ${productName}. My Cost: ₱${realCost.toFixed(2)}. My Wholesale: ₱${moq5.toFixed(2)}. Is it SUSTAINABLE for local resellers? PROCEED?`;
+        window.platformPrompt = `Compare local wholesale price ₱${moq5.toFixed(2)} for ${productName} vs Shopee/Lazada bulk prices + shipping. SUSTAINABLE for local buyers? PROCEED?`;
     }
 
-    let activePrompt = window.usePlatformAI ? platformAiPrompt : generalAiPrompt;
+    let activePrompt = window.usePlatformAI ? window.platformPrompt : window.generalPrompt;
     let googleLink = `https://www.google.com/search?q=${encodeURIComponent(activePrompt)}`;
-    let toggleCheckedStr = window.usePlatformAI ? "checked" : "";
 
     outputDiv.innerHTML += `
         <div class="market-research-box">
-            <div class="indie-heading" style="font-size: 20px; text-align: center;">✨ Scout the Market</div>
-            <div class="toggle-row" style="margin-top: 5px; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 15px;">
-                <span style="font-size: 12px; color: var(--text-muted);">Compare vs Shopee/Lazada?</span>
-                <label class="switch">
-                    <input type="checkbox" onchange="window.usePlatformAI = this.checked; calculate()" ${toggleCheckedStr}>
-                    <span class="slider"></span>
-                </label>
+            <div class="toggle-row" style="margin-top:0; margin-bottom:15px;">
+                <span style="font-size:11px; color:#aaa;">Compare vs Shopee/Lazada?</span>
+                <label class="switch"><input type="checkbox" onchange="window.usePlatformAI = this.checked; calculate()" ${window.usePlatformAI ? "checked" : ""}><span class="slider"></span></label>
             </div>
-            <a href="${googleLink}" target="_blank" class="scout-btn google-ai-btn" style="display: block; padding: 12px; font-size: 12px;">
-                🧠 ASK GOOGLE AI FOR ANALYSIS
-            </a>
-        </div>
-    `;
+            <a href="${googleLink}" target="_blank" class="scout-btn google-ai-btn">🧠 ASK GOOGLE AI FOR ANALYSIS</a>
+        </div>`;
 }
 </script>
-
 </body>
 </html>
