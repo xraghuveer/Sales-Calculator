@@ -1,151 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kitty Calculator + Market Scout</title>
+<div class="market-research-box">
+    <div class="indie-heading" style="font-size: 16px; text-align: center;">🚀 Ultimate Research</div>
+    
+    <a href="https://lens.google.com/search?p" target="_blank" class="scout-btn image-search-btn">
+        📸 1. SNAP & FIND NAME
+    </a>
 
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#ff0066">
-<link rel="apple-touch-icon" href="kitty_pwa_icon.png">
-<link rel="icon" type="image/png" sizes="192x192" href="kitty_pwa_icon.png">
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Indie+Flower&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700;800&display=swap');
-
-:root {
-    --bg-dark: #000000;
-    --card-dark: #111111;
-    --border-dark: #333333;
-    --text-main: #ffffff;
-    --text-muted: #a1a1aa;
-    --neon-pink: #ff0066;
-    --pink-glow: rgba(255, 0, 102, 0.3);
-}
-
-body { font-family: 'Inter', sans-serif; background: var(--bg-dark); color: var(--text-main); margin: 0; padding: 0; zoom: 0.9; }
-.container { max-width: 480px; margin: auto; padding: 20px; }
-
-h1 { font-family: 'Pacifico', cursive; text-align: center; font-size: 34px; color: var(--neon-pink); margin-bottom: 22px; }
-
-.card { background: var(--card-dark); padding: 20px; border-radius: 16px; margin-bottom: 20px; border: 1px solid var(--border-dark); }
-.indie-heading { font-family: 'Indie Flower', cursive; color: var(--neon-pink); font-size: 21px; margin-bottom: 10px; }
-
-.scout-btn { display: block; width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--neon-pink); background: transparent; color: var(--neon-pink); font-size: 12px; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; margin-top: 10px; transition: 0.3s; box-sizing: border-box; }
-.scout-btn:hover { background: var(--neon-pink); color: white; box-shadow: 0 0 15px var(--neon-pink); }
-
-/* Reverse Image Search Button */
-.image-search-btn { background: #1a1a1a; border: 1px solid #444; color: #eee; margin-bottom: 15px; }
-.image-search-btn:hover { background: #333; border-color: #666; box-shadow: none; }
-
-.google-ai-btn { background: linear-gradient(45deg, #ff0066, #9900ff); color: white; border: none; }
-
-label.input-label { font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-top: 15px; text-transform: uppercase; }
-input, select { font-family: 'JetBrains Mono', monospace; width: 100%; padding: 10px; margin-top: 8px; border-radius: 8px; border: 1px solid var(--border-dark); background: #0a0a0a; color: white; box-sizing: border-box; }
-textarea { font-family: 'JetBrains Mono', monospace; width: 100%; padding: 12px; margin-top: 15px; border-radius: 8px; border: 1px solid var(--border-dark); background: #0a0a0a; color: var(--neon-pink); font-size: 12px; resize: vertical; }
-
-.toggle-row { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
-.switch { position: relative; width: 40px; height: 22px; }
-.switch input { opacity: 0; width: 0; height: 0; }
-.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border-dark); transition: .3s; border-radius: 24px; }
-.slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
-input:checked + .slider { background-color: var(--neon-pink); }
-input:checked + .slider:before { transform: translateX(18px); }
-
-.data-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 13px; }
-.highlight { margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--neon-pink); color: var(--neon-pink); font-size: 20px; font-weight: 800; }
-
-.market-research-box { margin-top: 25px; padding: 15px; background: linear-gradient(145deg, #1a050d, #000000); border: 1px solid var(--neon-pink); border-radius: 12px; }
-</style>
-</head>
-
-<body>
-
-<div class="container">
-    <h1>Kitty Calculator 🐾</h1>
-
-    <div class="card">
-        <div class="indie-heading">Step 1: Identify Product</div>
-        <a href="https://lens.google.com/search?p" target="_blank" class="scout-btn image-search-btn">
-            📸 UPLOAD IMAGE TO FIND NAME
-        </a>
-        
-        <input type="text" id="productName" placeholder="Paste product name here..." oninput="calculate()">
-
-        <div class="indie-heading" style="margin-top: 25px;">Step 2: Pricing</div>
-        <select id="mode" onchange="calculate()">
-            <option value="retail">🛒 Retail Pricing</option>
-            <option value="wholesale">📦 Wholesale Pricing (FB)</option>
-        </select>
-
-        <label class="input-label">Unit Item Price (₱)</label>
-        <input type="number" id="cost" placeholder="0" oninput="calculate()">
-
-        <div style="display: flex; gap: 10px;">
-            <div style="flex: 1;"><label class="input-label">Qty</label><input type="number" id="items" value="1" oninput="calculate()"></div>
-            <div style="flex: 2;"><label class="input-label">Supplier Ship (₱)</label><input type="number" id="shipping" placeholder="0" oninput="calculate()"></div>
-        </div>
-
-        <div class="toggle-row" id="meetup-container">
-            <span>Include Meetup Fee?</span>
-            <label class="switch"><input type="checkbox" id="meetupToggle" onchange="calculate()"><span class="slider"></span></label>
-        </div>
-
-        <div id="output"></div>
+    <div class="toggle-row" style="margin: 10px 0; padding: 10px 0; border-top: 1px solid #333;">
+        <span style="font-size: 11px; color:#aaa;">Spy on Shopee/Lazada?</span>
+        <label class="switch">
+            <input type="checkbox" id="platformToggle" onchange="window.usePlatformAI = this.checked; calculate()">
+            <span class="slider"></span>
+        </label>
     </div>
+
+    <button onclick="copyPrompt()" class="scout-btn google-ai-btn" id="copyBtn">
+        📋 2. COPY AI STRATEGY
+    </button>
+    
+    <p id="copyStatus" style="font-size: 10px; color: #32d74b; text-align: center; margin-top: 5px; display: none;">Prompt Copied! Paste it into Google/Gemini ✨</p>
 </div>
 
 <script>
-window.usePlatformAI = false;
-const formatPHP = (num) => new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(num);
-const roundUpPrice = (price) => Math.ceil(price / 5) * 5;
-
-function calculate() {
-    let rawProductName = document.getElementById("productName").value.trim();
-    let productName = rawProductName !== "" ? rawProductName : "this item"; 
-    let mode = document.getElementById("mode").value;
-    let itemPrice = parseFloat(document.getElementById("cost").value) || 0;
-    let qty = parseFloat(document.getElementById("items").value) || 1;
-    let shipping = parseFloat(document.getElementById("shipping").value) || 0;
-    let includeMeetup = document.getElementById("meetupToggle").checked;
-
-    let outputDiv = document.getElementById("output");
-    if (itemPrice === 0) { outputDiv.innerHTML = ""; return; }
-
-    let realCost = itemPrice + (shipping / qty);
-    let baseRetailMath = realCost < 80 ? realCost + 10 : realCost <= 500 ? realCost * 1.25 : realCost + 300;
-    let standardRetailPrice = roundUpPrice(baseRetailMath);
-
-    if (mode === "retail") {
-        let meetupAmount = includeMeetup ? (standardRetailPrice < 200 ? 30 : standardRetailPrice < 300 ? 20 : 0) : 0;
-        let finalSellPrice = standardRetailPrice + meetupAmount;
-        outputDiv.innerHTML = `
-            <div class="result" style="margin-top:20px; border-top:1px solid #333; padding-top:15px;">
-                <div class="data-row"><span>Unit Cost:</span><span>${formatPHP(realCost)}</span></div>
-                <div class="highlight"><span style="font-size:12px; color:white; display:block;">Final Sell Price:</span>${formatPHP(finalSellPrice)}</div>
-            </div>`;
-
-        window.generalPrompt = `I sell on FB Marketplace LOCALLY ONLY. Analyze market for: ${productName}. My Cost: ₱${realCost.toFixed(2)}. My Price: ₱${finalSellPrice.toFixed(2)}. Output: Table [Cost | My Price | Avg Market | Min Price]. Is it SUSTAINABLE? Should I PROCEED?`;
-        window.platformPrompt = `I am a local FB seller. SPY on Shopee/Lazada for: ${productName}. Compare my Price ₱${finalSellPrice.toFixed(2)} vs their "Item + Shipping" cost. Is my price SUSTAINABLE for instant local pickup? Should I PROCEED?`;
-    } else {
-        let moq5 = roundUpPrice(realCost < 80 ? realCost + 5 : realCost <= 500 ? realCost * 1.15 : realCost + 150);
-        outputDiv.innerHTML = `<textarea rows="4" readonly onclick="this.select()">📦 WHOLESALE (Local Only)\n✅ 5+ pcs: ${formatPHP(moq5)} each\n✅ 10+ pcs: ${formatPHP(moq5*0.95)} each\n📩 Message to order!</textarea>`;
-        window.generalPrompt = `Wholesale analysis for: ${productName}. My Cost: ₱${realCost.toFixed(2)}. My Wholesale: ₱${moq5.toFixed(2)}. Is it SUSTAINABLE for local resellers? PROCEED?`;
-        window.platformPrompt = `Compare local wholesale price ₱${moq5.toFixed(2)} for ${productName} vs Shopee/Lazada bulk prices + shipping. SUSTAINABLE for local buyers? PROCEED?`;
-    }
-
+// Add this function to your existing <script> section
+function copyPrompt() {
     let activePrompt = window.usePlatformAI ? window.platformPrompt : window.generalPrompt;
-    let googleLink = `https://www.google.com/search?q=${encodeURIComponent(activePrompt)}`;
+    
+    // Create a temporary element to copy text
+    const el = document.createElement('textarea');
+    el.value = activePrompt;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
 
-    outputDiv.innerHTML += `
-        <div class="market-research-box">
-            <div class="toggle-row" style="margin-top:0; margin-bottom:15px;">
-                <span style="font-size:11px; color:#aaa;">Compare vs Shopee/Lazada?</span>
-                <label class="switch"><input type="checkbox" onchange="window.usePlatformAI = this.checked; calculate()" ${window.usePlatformAI ? "checked" : ""}><span class="slider"></span></label>
-            </div>
-            <a href="${googleLink}" target="_blank" class="scout-btn google-ai-btn">🧠 ASK GOOGLE AI FOR ANALYSIS</a>
-        </div>`;
+    // Visual feedback
+    const btn = document.getElementById('copyBtn');
+    const status = document.getElementById('copyStatus');
+    btn.innerText = "✅ READY TO PASTE";
+    status.style.display = "block";
+    
+    setTimeout(() => {
+        btn.innerText = "📋 2. COPY AI STRATEGY";
+        status.style.display = "none";
+    }, 3000);
 }
 </script>
-</body>
-</html>
