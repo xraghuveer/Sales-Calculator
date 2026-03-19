@@ -63,10 +63,6 @@ h1 {
 .scout-btn { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--neon-pink); background: transparent; color: var(--neon-pink); font-size: 11px; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; transition: 0.3s; display: block; box-sizing: border-box; font-family: var(--font-variable); }
 .scout-btn:hover { background: var(--neon-pink); color: white; box-shadow: 0 0 15px var(--neon-pink); }
 
-/* Reverse Image Search Button */
-.image-search-btn { background: #1a1a1a; border: 1px solid #444; color: #eee; margin-bottom: 15px; }
-.image-search-btn:hover { background: #333; border-color: #666; box-shadow: none; }
-
 /* Special Google AI Button styling */
 .google-ai-btn { background: linear-gradient(45deg, #ff0066, #9900ff); color: white; border: none; border-radius: 8px; font-weight: 800; font-family: var(--font-variable); font-size: 11px; }
 .google-ai-btn:hover { box-shadow: 0 0 15px #9900ff; }
@@ -99,7 +95,7 @@ input:checked + .slider:before { transform: translateX(18px); }
 .good { color: #32d74b; font-family: var(--font-variable); font-weight: 600; }
 .category-badge { display: inline-block; background: rgba(255, 0, 102, 0.1); color: var(--neon-pink); border: 1px solid var(--neon-pink); padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-/* Adjusted tips styling to look more like standard list items without default h3 margins */
+/* Adjusted tips styling */
 .tips-section ul { padding-left: 20px; margin: 15px 0 0 0; font-size: 13px; color: #d1d5db; line-height: 1.6; }
 .tips-section li { margin-bottom: 10px; }
 
@@ -114,11 +110,11 @@ input:checked + .slider:before { transform: translateX(18px); }
     <h1>Kitty Calculator 🐾</h1>
 
     <div class="card">
-        <div class="indie-heading" style="margin-top: 0; margin-bottom: 5px;">Product Details</div>
+        <div class="indie-heading" style="margin-top: 0; margin-bottom: 5px;">Step 1: Identify Product</div>
         
-        <input type="text" id="productName" placeholder="e.g. Satin Pillowcase with Zipper" oninput="calculate()">
+        <input type="text" id="productName" placeholder="Paste product name here..." oninput="calculate()">
 
-        <div class="indie-heading" style="margin-top: 25px; margin-bottom: 5px;">Sales Mode</div>
+        <div class="indie-heading" style="margin-top: 25px; margin-bottom: 5px;">Step 2: Pricing</div>
         <select id="mode" onchange="calculate()">
             <option value="retail">🛒 Retail Pricing</option>
             <option value="wholesale">📦 Wholesale Pricing (FB)</option>
@@ -223,7 +219,7 @@ function calculate() {
             </div>
         `;
 
-        // Tips (Using synced class styling)
+        // Tips
         let tips = [];
         if (!isGoodProfit) tips.push(`<li><b style="color: #ff453a;">⚠️ Low Margin:</b> Raise price to <span style="color: var(--neon-pink);">${formatPHP(realCost + minProfit)}</span>.</li>`);
         if (standardRetailPrice < 200) tips.push(`<li><b>📦 Sell in Bundles:</b> Sell "2 for <span style="color: var(--neon-pink);">${formatPHP(roundUpPrice((finalSellPrice * 2) * 0.9))}</span>".</li>`);
@@ -257,7 +253,7 @@ function calculate() {
             </div>
         `;
         
-        // Tips (Using synced class styling)
+        // Tips
         tipsDiv.innerHTML = `<div class="card tips-section"><div class="indie-heading section-title" style="margin-top: 0; padding-bottom: 5px;">💡 Wholesale Strategy</div><ul><li><b>Volume is Key:</b> Wholesale margins are smaller (${formatPHP(moq5 - realCost)} profit per unit at MOQ 5), but you make it up by moving volume.</li><li><b>Shipping:</b> Have the buyer cover courier costs (Lalamove, Grab) directly since bulk items are heavy.</li></ul></div>`;
 
         // Prompts
@@ -271,14 +267,10 @@ function calculate() {
     let activePrompt = window.usePlatformAI ? window.platformPrompt : window.generalPrompt;
     let googleLink = `https://www.google.com/search?q=${encodeURIComponent(activePrompt)}`;
 
-    // Market Research UI (Appended to the bottom of the calculator)
+    // Market Research UI
     outputDiv.innerHTML += `
         <div class="market-research-box">
             <div class="indie-heading" style="font-size: 20px; text-align: center;">🚀 Ultimate Research</div>
-            
-            <a href="https://lens.google.com/search?p" target="_blank" class="scout-btn image-search-btn" style="margin-top: 15px; margin-bottom: 15px;">
-                📸 1. SNAP & FIND NAME (GOOGLE LENS)
-            </a>
 
             <div class="toggle-row" style="margin: 10px 0; padding: 10px 0; border-top: 1px solid #333; border-bottom: 1px solid #333;">
                 <span style="font-size: 11px; color:#aaa;">Spy on Shopee/Lazada?</span>
@@ -296,6 +288,11 @@ function calculate() {
                     📋 COPY STRATEGY
                 </button>
             </div>
+            
+            <a href="https://lens.google.com/search?p" target="_blank" class="scout-btn google-ai-btn" style="margin-top: 8px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                📸 SNAP & FIND
+            </a>
+
             <p id="copyStatus" style="font-size: 10px; color: #32d74b; text-align: center; margin-top: 10px; display: none;">Prompt Copied! Paste it into Google/Gemini ✨</p>
         </div>
     `;
