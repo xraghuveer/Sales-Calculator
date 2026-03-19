@@ -60,7 +60,7 @@ h1 {
 .section-title { border-bottom: 1px dashed var(--border-dark); padding-bottom: 5px; }
 
 .btn-group { display: flex; gap: 8px; margin-top: 10px; }
-.scout-btn { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--neon-pink); background: transparent; color: var(--neon-pink); font-size: 11px; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; transition: 0.3s; display: block; box-sizing: border-box; }
+.scout-btn { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--neon-pink); background: transparent; color: var(--neon-pink); font-size: 11px; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; transition: 0.3s; display: block; box-sizing: border-box; font-family: var(--font-variable); }
 .scout-btn:hover { background: var(--neon-pink); color: white; box-shadow: 0 0 15px var(--neon-pink); }
 
 /* Reverse Image Search Button */
@@ -68,7 +68,7 @@ h1 {
 .image-search-btn:hover { background: #333; border-color: #666; box-shadow: none; }
 
 /* Special Google AI Button styling */
-.google-ai-btn { background: linear-gradient(45deg, #ff0066, #9900ff); color: white; border: none; border-radius: 8px; font-weight: 800; }
+.google-ai-btn { background: linear-gradient(45deg, #ff0066, #9900ff); color: white; border: none; border-radius: 8px; font-weight: 800; font-family: var(--font-variable); font-size: 11px; }
 .google-ai-btn:hover { box-shadow: 0 0 15px #9900ff; }
 
 label.input-label { font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-top: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -95,6 +95,8 @@ input:checked + .slider:before { transform: translateX(18px); }
 .data-row.highlight span:first-child { color: var(--text-main); font-weight: 600; }
 .data-row.highlight span:last-child { font-size: 20px; font-weight: 800; color: var(--neon-pink); }
 
+.bad { color: #ff453a; font-family: var(--font-variable); font-weight: 600; }
+.good { color: #32d74b; font-family: var(--font-variable); font-weight: 600; }
 .category-badge { display: inline-block; background: rgba(255, 0, 102, 0.1); color: var(--neon-pink); border: 1px solid var(--neon-pink); padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
 
 /* Adjusted tips styling to look more like standard list items without default h3 margins */
@@ -112,15 +114,11 @@ input:checked + .slider:before { transform: translateX(18px); }
     <h1>Kitty Calculator 🐾</h1>
 
     <div class="card">
-        <div class="indie-heading" style="margin-top: 0; margin-bottom: 5px;">Step 1: Identify Product</div>
+        <div class="indie-heading" style="margin-top: 0; margin-bottom: 5px;">Product Details</div>
         
-        <a href="https://lens.google.com/search?p" target="_blank" class="scout-btn image-search-btn">
-            📸 1. SNAP & FIND NAME
-        </a>
-        
-        <input type="text" id="productName" placeholder="Paste product name here..." oninput="calculate()">
+        <input type="text" id="productName" placeholder="e.g. Satin Pillowcase with Zipper" oninput="calculate()">
 
-        <div class="indie-heading" style="margin-top: 25px; margin-bottom: 5px;">Step 2: Pricing</div>
+        <div class="indie-heading" style="margin-top: 25px; margin-bottom: 5px;">Sales Mode</div>
         <select id="mode" onchange="calculate()">
             <option value="retail">🛒 Retail Pricing</option>
             <option value="wholesale">📦 Wholesale Pricing (FB)</option>
@@ -199,7 +197,6 @@ function calculate() {
     window.platformPrompt = "";
 
     if (mode === "retail") {
-        // FULL RETAIL RESTORED
         let minProfit = realCost < 80 ? 8 : realCost <= 500 ? 40 : 200;
         
         let meetupAmount = 0;
@@ -238,7 +235,6 @@ function calculate() {
         window.platformPrompt = `I am a local-only Facebook Marketplace seller. SPY on Shopee/Lazada Philippines prices for: ${productName}. Compare my FB Price of ₱${finalSellPrice.toFixed(2)} vs their "Total Landed Price" (Item Price + Shipping). Output: 1) Table [My FB Price | Avg Shopee Price | Avg Lazada Price | Realistic Min Price]. 2) Is my price SUSTAINABLE considering the benefit of "Instant Pickup/No Shipping wait"? Should I PROCEED? 3) A short FB listing template emphasizing "Get it today - No waiting for shipping".`;
 
     } else {
-        // FULL WHOLESALE RESTORED
         let baseWholesale = realCost < 80 ? realCost + 5 : realCost <= 500 ? realCost * 1.15 : realCost + 150;
         let moq5 = baseWholesale;
         let moq10 = baseWholesale * 0.95; 
@@ -275,11 +271,15 @@ function calculate() {
     let activePrompt = window.usePlatformAI ? window.platformPrompt : window.generalPrompt;
     let googleLink = `https://www.google.com/search?q=${encodeURIComponent(activePrompt)}`;
 
-    // Market Research UI (Side-by-side buttons)
+    // Market Research UI (Appended to the bottom of the calculator)
     outputDiv.innerHTML += `
         <div class="market-research-box">
             <div class="indie-heading" style="font-size: 20px; text-align: center;">🚀 Ultimate Research</div>
             
+            <a href="https://lens.google.com/search?p" target="_blank" class="scout-btn image-search-btn" style="margin-top: 15px; margin-bottom: 15px;">
+                📸 1. SNAP & FIND NAME (GOOGLE LENS)
+            </a>
+
             <div class="toggle-row" style="margin: 10px 0; padding: 10px 0; border-top: 1px solid #333; border-bottom: 1px solid #333;">
                 <span style="font-size: 11px; color:#aaa;">Spy on Shopee/Lazada?</span>
                 <label class="switch">
@@ -289,10 +289,10 @@ function calculate() {
             </div>
 
             <div style="display: flex; gap: 8px;">
-                <a href="${googleLink}" target="_blank" class="scout-btn google-ai-btn" style="flex: 1; padding: 12px; font-size: 11px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                <a href="${googleLink}" target="_blank" class="scout-btn google-ai-btn" style="flex: 1; padding: 12px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
                     🧠 ASK GOOGLE AI
                 </a>
-                <button onclick="copyPrompt()" class="scout-btn google-ai-btn" id="copyBtn" style="flex: 1; padding: 12px; font-size: 11px; display: flex; align-items: center; justify-content: center;">
+                <button onclick="copyPrompt()" class="scout-btn google-ai-btn" id="copyBtn" style="flex: 1; padding: 12px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer;">
                     📋 COPY STRATEGY
                 </button>
             </div>
