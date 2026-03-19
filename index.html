@@ -38,7 +38,7 @@ body {
     color: var(--text-main); 
     margin: 0; 
     padding: 0; 
-    zoom: 0.9; /* SCALES EVERYTHING DOWN BY 10% */
+    zoom: 0.9; 
 }
 .container { max-width: 480px; margin: auto; padding: 20px; }
 
@@ -55,7 +55,6 @@ h1 {
 
 .card { background: var(--card-dark); padding: 20px; border-radius: 16px; margin-bottom: 20px; border: 1px solid var(--border-dark); }
 
-/* 15% Smaller Indie Headings */
 .indie-heading { font-family: var(--font-handwritten); color: var(--neon-pink); font-size: 21px; letter-spacing: 1px; margin-bottom: 10px; }
 .section-title { border-bottom: 1px dashed var(--border-dark); padding-bottom: 5px; }
 
@@ -63,7 +62,6 @@ h1 {
 .scout-btn { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--neon-pink); background: transparent; color: var(--neon-pink); font-size: 11px; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; transition: 0.3s; display: block; box-sizing: border-box; font-family: var(--font-variable); }
 .scout-btn:hover { background: var(--neon-pink); color: white; box-shadow: 0 0 15px var(--neon-pink); }
 
-/* Special Google AI Button styling */
 .google-ai-btn { background: linear-gradient(45deg, #ff0066, #9900ff); color: white; border: none; border-radius: 8px; font-weight: 800; font-family: var(--font-variable); font-size: 11px; }
 .google-ai-btn:hover { box-shadow: 0 0 15px #9900ff; }
 
@@ -95,11 +93,9 @@ input:checked + .slider:before { transform: translateX(18px); }
 .good { color: #32d74b; font-family: var(--font-variable); font-weight: 600; }
 .category-badge { display: inline-block; background: rgba(255, 0, 102, 0.1); color: var(--neon-pink); border: 1px solid var(--neon-pink); padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-/* Adjusted tips styling */
 .tips-section ul { padding-left: 20px; margin: 15px 0 0 0; font-size: 13px; color: #d1d5db; line-height: 1.6; }
 .tips-section li { margin-bottom: 10px; }
 
-/* New Market Research Section */
 .market-research-box { margin-top: 25px; padding: 15px; background: linear-gradient(145deg, #1a050d, #000000); border: 1px solid var(--neon-pink); border-radius: 12px; }
 </style>
 </head>
@@ -110,11 +106,11 @@ input:checked + .slider:before { transform: translateX(18px); }
     <h1>Kitty Calculator 🐾</h1>
 
     <div class="card">
-        <div class="indie-heading" style="margin-top: 0; margin-bottom: 5px;">Step 1: Identify Product</div>
+        <div class="indie-heading" style="margin-top: 0; margin-bottom: 5px;">Product Details</div>
         
         <input type="text" id="productName" placeholder="Paste product name here..." oninput="calculate()">
 
-        <div class="indie-heading" style="margin-top: 25px; margin-bottom: 5px;">Step 2: Pricing</div>
+        <div class="indie-heading" style="margin-top: 25px; margin-bottom: 5px;">Sales Mode</div>
         <select id="mode" onchange="calculate()">
             <option value="retail">🛒 Retail Pricing</option>
             <option value="wholesale">📦 Wholesale Pricing (FB)</option>
@@ -157,6 +153,26 @@ window.usePlatformAI = false;
 const formatPHP = (num) => new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(num);
 const roundUpPrice = (price) => Math.ceil(price / 5) * 5;
 
+// Smart Image Search Function 
+function openImageSearch(e) {
+    if (e) e.preventDefault();
+    let isMobileResolution = window.innerWidth <= 768;
+    let userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    let isAndroid = /android/i.test(userAgent);
+    let isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+
+    if (isMobileResolution && (isAndroid || isIOS)) {
+        if (isAndroid) {
+            window.location.href = "intent://lens.google.com/#Intent;package=com.google.android.googlequicksearchbox;scheme=https;end";
+        } else if (isIOS) {
+            window.location.href = "googleapp://";
+            setTimeout(function() { window.location.href = "https://lens.google.com/search?p"; }, 1000);
+        }
+    } else {
+        window.open("https://lens.google.com/search?p", "_blank");
+    }
+}
+
 function calculate() {
     let rawProductName = document.getElementById("productName").value.trim();
     let productName = rawProductName !== "" ? rawProductName : "this item"; 
@@ -180,15 +196,12 @@ function calculate() {
         return;
     }
 
-    // BASE CALCULATIONS
     let realCost = itemPrice + (shipping / qty);
     let category = realCost < 80 ? "Small Item (Under ₱80)" : realCost <= 500 ? "Medium Item (₱80 - ₱500)" : "Big Item (₱500+)";
 
-    // ALWAYS CALCULATE RETAIL PRICE
     let baseRetailMath = realCost < 80 ? realCost + 10 : realCost <= 500 ? realCost * 1.25 : realCost + 300;
     let standardRetailPrice = roundUpPrice(baseRetailMath);
 
-    // Prompt Variables
     window.generalPrompt = "";
     window.platformPrompt = "";
 
@@ -208,7 +221,6 @@ function calculate() {
         let isGoodProfit = profit >= minProfit;
         let profitColor = isGoodProfit ? "#32d74b" : "#ff453a";
 
-        // Output Math
         outputDiv.innerHTML = `
             <div class="result">
                 <span class="category-badge">${category}</span>
@@ -219,16 +231,16 @@ function calculate() {
             </div>
         `;
 
-        // Tips
         let tips = [];
         if (!isGoodProfit) tips.push(`<li><b style="color: #ff453a;">⚠️ Low Margin:</b> Raise price to <span style="color: var(--neon-pink);">${formatPHP(realCost + minProfit)}</span>.</li>`);
         if (standardRetailPrice < 200) tips.push(`<li><b>📦 Sell in Bundles:</b> Sell "2 for <span style="color: var(--neon-pink);">${formatPHP(roundUpPrice((finalSellPrice * 2) * 0.9))}</span>".</li>`);
         tipsDiv.innerHTML = `<div class="card tips-section"><div class="indie-heading section-title" style="margin-top: 0; padding-bottom: 5px;">💡 Retail Strategy</div><ul>${tips.join("")}</ul></div>`;
 
-        // Prompts
-        window.generalPrompt = `I am a Facebook Marketplace seller in the Philippines selling LOCALLY ONLY (Meetup/Pick-up). Analyze the local market for: ${productName}. My Cost: ₱${realCost.toFixed(2)}. My Price: ₱${finalSellPrice.toFixed(2)}. Output: 1) Table [Cost | My Price | Avg Market Price | Realistic Min Price]. 2) Is it SUSTAINABLE for a local-only seller? Should I PROCEED? 3) A short FB listing template emphasizing local pickup.`;
+        // Updated Prompt: Added Suggested Price comparison
+        window.generalPrompt = `I am a Facebook Marketplace seller in the Philippines selling LOCALLY ONLY (Meetup/Pick-up). Analyze the local market for: ${productName}. My Cost: ₱${realCost.toFixed(2)}. My Price: ₱${finalSellPrice.toFixed(2)}. Output: 1) Table [Cost | My Price | Avg Market Price | Realistic Min Price | AI's Optimal Suggested Price]. 2) Verdict: Compare my price to your suggested optimal price. Is my pricing strategy SUSTAINABLE for a local-only seller? Should I PROCEED? 3) A short FB listing template emphasizing local pickup.`;
 
-        window.platformPrompt = `I am a local-only Facebook Marketplace seller. SPY on Shopee/Lazada Philippines prices for: ${productName}. Compare my FB Price of ₱${finalSellPrice.toFixed(2)} vs their "Total Landed Price" (Item Price + Shipping). Output: 1) Table [My FB Price | Avg Shopee Price | Avg Lazada Price | Realistic Min Price]. 2) Is my price SUSTAINABLE considering the benefit of "Instant Pickup/No Shipping wait"? Should I PROCEED? 3) A short FB listing template emphasizing "Get it today - No waiting for shipping".`;
+        // Updated Prompt: Added Suggested Price comparison
+        window.platformPrompt = `I am a local-only Facebook Marketplace seller. SPY on Shopee/Lazada Philippines prices for: ${productName}. Compare my FB Price of ₱${finalSellPrice.toFixed(2)} vs their "Total Landed Price" (Item Price + Shipping). Output: 1) Table [My FB Price | Avg Shopee Landed Price | Avg Lazada Landed Price | Realistic Min Price | AI's Optimal Suggested FB Price]. 2) Verdict: Compare my price to your suggested price. Is my price SUSTAINABLE considering the "Instant Pickup" advantage? Should I PROCEED? 3) A short FB listing template emphasizing "Get it today - No waiting for shipping".`;
 
     } else {
         let baseWholesale = realCost < 80 ? realCost + 5 : realCost <= 500 ? realCost * 1.15 : realCost + 150;
@@ -238,7 +250,6 @@ function calculate() {
 
         let fbText = `📦 WHOLESALE PRICE LIST 📦\n\n✅ 5+ pcs: ${formatPHP(moq5)} each\n✅ 10+ pcs: ${formatPHP(moq10)} each\n✅ 20+ pcs: ${formatPHP(moq20)} each\n\n📩 Send us a message to order!`;
 
-        // Output Math
         outputDiv.innerHTML = `
             <div class="result">
                 <span class="category-badge">${category}</span>
@@ -253,21 +264,19 @@ function calculate() {
             </div>
         `;
         
-        // Tips
         tipsDiv.innerHTML = `<div class="card tips-section"><div class="indie-heading section-title" style="margin-top: 0; padding-bottom: 5px;">💡 Wholesale Strategy</div><ul><li><b>Volume is Key:</b> Wholesale margins are smaller (${formatPHP(moq5 - realCost)} profit per unit at MOQ 5), but you make it up by moving volume.</li><li><b>Shipping:</b> Have the buyer cover courier costs (Lalamove, Grab) directly since bulk items are heavy.</li></ul></div>`;
 
-        // Prompts
-        window.generalPrompt = `I am a Facebook Wholesale supplier selling LOCALLY ONLY to resellers. Analyze the market for: ${productName}. My Cost: ₱${realCost.toFixed(2)}. My Wholesale (MOQ 5) Price: ₱${moq5.toFixed(2)}. Output: 1) Table [Cost | My Wholesale | Avg Market Wholesale | Realistic Min Wholesale]. 2) Is this SUSTAINABLE for local resellers? Should I PROCEED? 3) A wholesale listing template for local buyers.`;
+        // Updated Prompt: Added Suggested Price comparison
+        window.generalPrompt = `I am a Facebook Wholesale supplier selling LOCALLY ONLY to resellers. Analyze the market for: ${productName}. My Cost: ₱${realCost.toFixed(2)}. My Wholesale (MOQ 5) Price: ₱${moq5.toFixed(2)}. Output: 1) Table [Cost | My Wholesale | Avg Market Wholesale | Realistic Min Wholesale | AI's Optimal Suggested Wholesale Price]. 2) Verdict: Compare my price to your suggested optimal price. Is this SUSTAINABLE for local resellers to flip? Should I PROCEED? 3) A wholesale listing template for local buyers.`;
 
-        window.platformPrompt = `I am a local Facebook Wholesale supplier. SPY on Shopee/Lazada BULK prices for: ${productName}. My local Bulk Price is ₱${moq5.toFixed(2)}. Compare this vs their bulk prices including high shipping fees for heavy items. Output: 1) Table [My FB Bulk | Shopee Bulk Avg | Lazada Bulk Avg | Realistic Min Bulk]. 2) Is my price SUSTAINABLE for local resellers who want to avoid shipping delays? Should I PROCEED? 3) A wholesale listing template.`;
+        // Updated Prompt: Added Suggested Price comparison
+        window.platformPrompt = `I am a local Facebook Wholesale supplier. SPY on Shopee/Lazada BULK prices for: ${productName}. My local Bulk Price is ₱${moq5.toFixed(2)}. Compare this vs their bulk prices including high shipping fees for heavy items. Output: 1) Table [My FB Bulk | Shopee Bulk Avg | Lazada Bulk Avg | Realistic Min Bulk | AI's Optimal Suggested FB Bulk Price]. 2) Verdict: Compare my price to your suggested price. Is my price SUSTAINABLE for local resellers avoiding shipping delays? Should I PROCEED? 3) A wholesale listing template.`;
     }
 
-    // Toggle checked state string
     let toggleCheckedStr = window.usePlatformAI ? "checked" : "";
     let activePrompt = window.usePlatformAI ? window.platformPrompt : window.generalPrompt;
     let googleLink = `https://www.google.com/search?q=${encodeURIComponent(activePrompt)}`;
 
-    // Market Research UI
     outputDiv.innerHTML += `
         <div class="market-research-box">
             <div class="indie-heading" style="font-size: 20px; text-align: center;">🚀 Ultimate Research</div>
@@ -288,17 +297,15 @@ function calculate() {
                     📋 COPY STRATEGY
                 </button>
             </div>
-            
-            <a href="https://lens.google.com/search?p" target="_blank" class="scout-btn google-ai-btn" style="margin-top: 8px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
-                📸 SNAP & FIND
-            </a>
-
             <p id="copyStatus" style="font-size: 10px; color: #32d74b; text-align: center; margin-top: 10px; display: none;">Prompt Copied! Paste it into Google/Gemini ✨</p>
+            
+            <button onclick="openImageSearch(event)" class="scout-btn google-ai-btn" style="width: 100%; margin-top: 12px; padding: 12px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer;">
+                📸 SNAP & FIND
+            </button>
         </div>
     `;
 }
 
-// Copy to Clipboard Logic
 function copyPrompt() {
     let activePrompt = window.usePlatformAI ? window.platformPrompt : window.generalPrompt;
     
