@@ -153,26 +153,6 @@ window.usePlatformAI = false;
 const formatPHP = (num) => new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(num);
 const roundUpPrice = (price) => Math.ceil(price / 5) * 5;
 
-// Smart Image Search Function 
-function openImageSearch(e) {
-    if (e) e.preventDefault();
-    let isMobileResolution = window.innerWidth <= 768;
-    let userAgent = navigator.userAgent || navigator.vendor || window.opera;
-    let isAndroid = /android/i.test(userAgent);
-    let isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
-
-    if (isMobileResolution && (isAndroid || isIOS)) {
-        if (isAndroid) {
-            window.location.href = "intent://lens.google.com/#Intent;package=com.google.android.googlequicksearchbox;scheme=https;end";
-        } else if (isIOS) {
-            window.location.href = "googleapp://";
-            setTimeout(function() { window.location.href = "https://lens.google.com/search?p"; }, 1000);
-        }
-    } else {
-        window.open("https://lens.google.com/search?p", "_blank");
-    }
-}
-
 function calculate() {
     let rawProductName = document.getElementById("productName").value.trim();
     let productName = rawProductName !== "" ? rawProductName : "this item"; 
@@ -236,10 +216,8 @@ function calculate() {
         if (standardRetailPrice < 200) tips.push(`<li><b>📦 Sell in Bundles:</b> Sell "2 for <span style="color: var(--neon-pink);">${formatPHP(roundUpPrice((finalSellPrice * 2) * 0.9))}</span>".</li>`);
         tipsDiv.innerHTML = `<div class="card tips-section"><div class="indie-heading section-title" style="margin-top: 0; padding-bottom: 5px;">💡 Retail Strategy</div><ul>${tips.join("")}</ul></div>`;
 
-        // Updated Prompt: Added Suggested Price comparison
         window.generalPrompt = `I am a Facebook Marketplace seller in the Philippines selling LOCALLY ONLY (Meetup/Pick-up). Analyze the local market for: ${productName}. My Cost: ₱${realCost.toFixed(2)}. My Price: ₱${finalSellPrice.toFixed(2)}. Output: 1) Table [Cost | My Price | Avg Market Price | Realistic Min Price | AI's Optimal Suggested Price]. 2) Verdict: Compare my price to your suggested optimal price. Is my pricing strategy SUSTAINABLE for a local-only seller? Should I PROCEED? 3) A short FB listing template emphasizing local pickup.`;
 
-        // Updated Prompt: Added Suggested Price comparison
         window.platformPrompt = `I am a local-only Facebook Marketplace seller. SPY on Shopee/Lazada Philippines prices for: ${productName}. Compare my FB Price of ₱${finalSellPrice.toFixed(2)} vs their "Total Landed Price" (Item Price + Shipping). Output: 1) Table [My FB Price | Avg Shopee Landed Price | Avg Lazada Landed Price | Realistic Min Price | AI's Optimal Suggested FB Price]. 2) Verdict: Compare my price to your suggested price. Is my price SUSTAINABLE considering the "Instant Pickup" advantage? Should I PROCEED? 3) A short FB listing template emphasizing "Get it today - No waiting for shipping".`;
 
     } else {
@@ -266,16 +244,27 @@ function calculate() {
         
         tipsDiv.innerHTML = `<div class="card tips-section"><div class="indie-heading section-title" style="margin-top: 0; padding-bottom: 5px;">💡 Wholesale Strategy</div><ul><li><b>Volume is Key:</b> Wholesale margins are smaller (${formatPHP(moq5 - realCost)} profit per unit at MOQ 5), but you make it up by moving volume.</li><li><b>Shipping:</b> Have the buyer cover courier costs (Lalamove, Grab) directly since bulk items are heavy.</li></ul></div>`;
 
-        // Updated Prompt: Added Suggested Price comparison
         window.generalPrompt = `I am a Facebook Wholesale supplier selling LOCALLY ONLY to resellers. Analyze the market for: ${productName}. My Cost: ₱${realCost.toFixed(2)}. My Wholesale (MOQ 5) Price: ₱${moq5.toFixed(2)}. Output: 1) Table [Cost | My Wholesale | Avg Market Wholesale | Realistic Min Wholesale | AI's Optimal Suggested Wholesale Price]. 2) Verdict: Compare my price to your suggested optimal price. Is this SUSTAINABLE for local resellers to flip? Should I PROCEED? 3) A wholesale listing template for local buyers.`;
 
-        // Updated Prompt: Added Suggested Price comparison
         window.platformPrompt = `I am a local Facebook Wholesale supplier. SPY on Shopee/Lazada BULK prices for: ${productName}. My local Bulk Price is ₱${moq5.toFixed(2)}. Compare this vs their bulk prices including high shipping fees for heavy items. Output: 1) Table [My FB Bulk | Shopee Bulk Avg | Lazada Bulk Avg | Realistic Min Bulk | AI's Optimal Suggested FB Bulk Price]. 2) Verdict: Compare my price to your suggested price. Is my price SUSTAINABLE for local resellers avoiding shipping delays? Should I PROCEED? 3) A wholesale listing template.`;
     }
 
     let toggleCheckedStr = window.usePlatformAI ? "checked" : "";
     let activePrompt = window.usePlatformAI ? window.platformPrompt : window.generalPrompt;
     let googleLink = `https://www.google.com/search?q=${encodeURIComponent(activePrompt)}`;
+
+    // SMART INTENT DETECTION FOR GOOGLE LENS
+    let userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    let isAndroid = /android/i.test(userAgent);
+    
+    let lensHref = "https://lens.google.com/search?p";
+    let lensTarget = 'target="_blank"';
+
+    if (isAndroid) {
+        // Strict intent protocol to force Google App on Android
+        lensHref = "intent://lens.google.com/#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https%3A%2F%2Flens.google.com%2F;end";
+        lensTarget = ""; // Clear target blank so intent can fire in same window
+    }
 
     outputDiv.innerHTML += `
         <div class="market-research-box">
@@ -299,9 +288,9 @@ function calculate() {
             </div>
             <p id="copyStatus" style="font-size: 10px; color: #32d74b; text-align: center; margin-top: 10px; display: none;">Prompt Copied! Paste it into Google/Gemini ✨</p>
             
-            <button onclick="openImageSearch(event)" class="scout-btn google-ai-btn" style="width: 100%; margin-top: 12px; padding: 12px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer;">
+            <a href="${lensHref}" ${lensTarget} class="scout-btn google-ai-btn" style="width: 100%; margin-top: 12px; padding: 12px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
                 📸 SNAP & FIND
-            </button>
+            </a>
         </div>
     `;
 }
